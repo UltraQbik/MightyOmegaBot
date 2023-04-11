@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from os import environ
 
 
 class Client(commands.Bot):
@@ -41,9 +42,7 @@ class Client(commands.Bot):
 
 def main():
     client = Client()
-    with open("token.txt", "r") as f:
-        tok = f.read()
-    client.run(tok)
+    client.run(environ["BOT_TOK"])
 
 
 if __name__ == '__main__':
