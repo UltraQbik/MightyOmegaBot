@@ -1,4 +1,4 @@
 
 token.txt
-.idea/
-cogs/__pycache__/
+.idea\
+cogs\__pycache__\
