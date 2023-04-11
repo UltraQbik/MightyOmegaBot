@@ -3,5 +3,4 @@
 
 
 # How to make it work
- Just add file *token.txt* with discord bot token inside (no formatting) and run *main.py*
- It'll work
+ Add BOT_TOK to your enviroment variables that has the value of your token.
