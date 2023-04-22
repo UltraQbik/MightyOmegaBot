@@ -68,7 +68,7 @@ class EXTRoles(commands.Cog):
                     embed.add_field(name=self.loc.bw("role_cmd_role_removed"),
                                     value=role_name, inline=False)
                     await inter.user.remove_roles(role)
-            await inter.response.send_message(embed=embed, ephemeral=True)
+            await inter.response.send_message(embed=embed)
             await interaction.delete_original_message()
 
         select.callback = callback

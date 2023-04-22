@@ -13,8 +13,8 @@
 
   "role_cmd_placeholder": "Выберите роль",
   "role_cmd_role_change": "Следующие роли были успешно изменены:",
-  "role_cmd_role_added": "Добавленна роль",
-  "role_cmd_role_removed": "Удалена роль",
+  "role_cmd_role_added": "Добавленна роль ✅",
+  "role_cmd_role_removed": "Удалена роль ❌",
 
   "cmd_success": "Успех!",
   "cmd_fail": "Ошибка!"

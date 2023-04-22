@@ -44,6 +44,9 @@ class EXTLoader(commands.Cog):
     async def load_cog(self, ctx, cog_name: str):
         try:
             await self.client.load_extension("cogs." + cog_name)
+            sync = await self.client.tree.sync()
+            print(f"\nSlash command tree synced {len(sync)} commands\n")
+
             embed = discord.Embed(title="Success!",
                                   description=f"Successfully loaded '`{cog_name}`'!",
                                   color=discord.Color.green())
@@ -63,6 +66,9 @@ class EXTLoader(commands.Cog):
     async def unload_cog(self, ctx, cog_name: str):
         try:
             await self.client.unload_extension("cogs." + cog_name)
+            sync = await self.client.tree.sync()
+            print(f"\nSlash command tree synced {len(sync)} commands\n")
+
             embed = discord.Embed(title="Success!",
                                   description=f"Successfully unloaded '`{cog_name}`'!",
                                   color=discord.Color.green())
@@ -82,6 +88,9 @@ class EXTLoader(commands.Cog):
     async def reload_cog(self, ctx, cog_name: str):
         try:
             await self.client.reload_extension("cogs." + cog_name)
+            sync = await self.client.tree.sync()
+            print(f"\nSlash command tree synced {len(sync)} commands\n")
+
             embed = discord.Embed(title="Success!",
                                   description=f"Successfully reloaded '`{cog_name}`'!",
                                   color=discord.Color.green())

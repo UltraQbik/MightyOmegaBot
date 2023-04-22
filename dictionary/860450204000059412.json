@@ -13,8 +13,8 @@
 
   "role_cmd_placeholder": "Pick a role",
   "role_cmd_role_change": "Successfully changed roles:",
-  "role_cmd_role_added": "Added role",
-  "role_cmd_role_removed": "Removed role",
+  "role_cmd_role_added": "Added role ✅",
+  "role_cmd_role_removed": "Removed role ❌",
 
   "cmd_success": "Success!",
   "cmd_fail": "Fail!"
