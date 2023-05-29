@@ -11,7 +11,8 @@ class Client(commands.Bot):
         self.cog_list = [
             "cogs.EXTLoader",
             "cogs.EXTRoles",
-            "cogs.EXTLogging"
+            "cogs.EXTLogging",
+            "cogs.EXTMinesweeper"
         ]
 
     async def setup_hook(self) -> None:

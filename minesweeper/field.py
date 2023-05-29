@@ -1,6 +1,6 @@
 import typing as tp
 from random import randint
-import cell
+from minesweeper import cell
 
 
 class Field:

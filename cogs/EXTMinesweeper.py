@@ -8,13 +8,21 @@ class EXTMinesweeper(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @app_commands
     @app_commands.command(
         name="ms-gen",
         description="Generates minesweeper field")
-    async def ms_gen(self, interaction: discord.Interaction):
-        generated_field = Field(10, 9).generate()
-        await interaction.response.send_message(str(generated_field))
+    @app_commands.describe(
+        size="Size of the field",
+        mines="Number of mines on the field")
+    async def ms_gen(
+        self,
+        interaction: discord.Interaction,
+        size: int = 9,
+        mines: int = 10
+    ):
+        field = Field(size, mines)
+        field.generate()
+        await interaction.response.send_message(f"Minesweeper\n{field}\n")
 
 
 async def setup(client: commands.Bot) -> None:
