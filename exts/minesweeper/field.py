@@ -28,7 +28,6 @@ class Field:
             x = randint(0, self.field_size - 1)
             y = randint(0, self.field_size - 1)
             if self.field[y][x].is_mine:
-                mines_left += 1
                 continue
             self.field[y][x].is_mine = True
             for i in range(-1, 2):
