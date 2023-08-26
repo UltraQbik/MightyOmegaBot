@@ -2,6 +2,7 @@ import os
 import sys
 import discord
 from discord.ext import commands
+from discord import app_commands
 # from configparser import ConfigParser
 
 
@@ -16,7 +17,7 @@ class Client(commands.Bot):
 
         # stores the list of exts loaded by default
         # format: ["extension1", "extension2", ...]
-        self.loaded_extensions: list[str] = ["minesweeper"]
+        self.loaded_extensions: list[str] = ["minesweeper", "ping"]
 
         # check all the installed extensions
         self.check_working_extensions()
