@@ -3,4 +3,4 @@
 
 
 # How to make it work
- Add BOT_TOK to your enviroment variables that has the value of your token.
+ Add your bot token as the first argument. Ex. "main.py [token here]"

@@ -1,4 +1,5 @@
 import os
+import sys
 import discord
 from discord.ext import commands
 # from configparser import ConfigParser
@@ -6,7 +7,7 @@ from discord.ext import commands
 
 class Client(commands.Bot):
     def __init__(self):
-        super(Client, self).__init__(command_prefix=commands.when_mentioned_or("!"), intents=discord.Intents.all(),
+        super(Client, self).__init__(command_prefix=None, intents=discord.Intents.all(),
                                      help_command=None)
 
         # stores of list of all exts
@@ -15,7 +16,7 @@ class Client(commands.Bot):
 
         # stores the list of exts loaded by default
         # format: ["extension1", "extension2", ...]
-        self.loaded_extensions: list[str] = ["minesweeper"]
+        self.loaded_extensions: list[str] = []
 
         # check all the installed extensions
         self.check_working_extensions()
@@ -79,7 +80,7 @@ class Client(commands.Bot):
 
 def main():
     client = Client()
-    client.run(os.environ["BOT_TOK"])
+    client.run(sys.argv[1])
 
 
 if __name__ == '__main__':
