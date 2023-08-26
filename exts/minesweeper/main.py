@@ -12,7 +12,7 @@ class EXTMinesweeper(commands.Cog):
         name="ms-gen",
         description="Generates minesweeper field")
     @app_commands.describe(
-        size="Size of the field ((0, 10)) (Default: 9)",
+        size="Size of the field ((0, 10)) (default: 9)",
         mines="Number of mines on the field ((0, size^2]) (default: 10)")
     async def ms_gen(
         self,
