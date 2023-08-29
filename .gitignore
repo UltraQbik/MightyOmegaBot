@@ -3,3 +3,4 @@ token.txt
 .idea/*
 cogs/__pycache__/*
 cogs/logging/*
+/exts/smccompiler/.idea/

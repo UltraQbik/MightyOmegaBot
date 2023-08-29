@@ -8,7 +8,7 @@ from discord import app_commands
 
 class Client(commands.Bot):
     def __init__(self):
-        super(Client, self).__init__(command_prefix=None, intents=discord.Intents.all(),
+        super(Client, self).__init__(command_prefix="!!", intents=discord.Intents.all(),
                                      help_command=None)
 
         # stores of list of all exts
@@ -17,14 +17,14 @@ class Client(commands.Bot):
 
         # stores the list of exts loaded by default
         # format: ["extension1", "extension2", ...]
-        self.loaded_extensions: list[str] = ["minesweeper", "ping"]
+        self.loaded_extensions: list[str] = ["minesweeper", "ping", "smccompiler"]
 
         # check all the installed extensions
         self.check_working_extensions()
 
     def check_working_extensions(self):
         for folder in os.listdir("exts"):
-            # check if 'main.py' exists
+            # check if 'compiler.py' exists
             if os.path.isfile(f"exts/{folder}/main.py"):
                 # import the extension to the list of working extensions
                 # with the name being the name of the folder it's in
@@ -38,9 +38,9 @@ class Client(commands.Bot):
             #
             #     # check if config contains the extension name
             #     if config.has_section("DEFAULT") and config["DEFAULT"].get("ExtensionName") is not None \
-            #        and os.path.isfile(f"exts/{folder}/main.py"):
+            #        and os.path.isfile(f"exts/{folder}/compiler.py"):
             #         # write it to the list of working extensions
-            #         self.working_extensions[config["DEFAULT"]["ExtensionName"]] = f"exts.{folder}.main.py"
+            #         self.working_extensions[config["DEFAULT"]["ExtensionName"]] = f"exts.{folder}.compiler.py"
 
     async def load_custom_extension(self, name):
         await self.load_extension(self.working_extensions[name])
