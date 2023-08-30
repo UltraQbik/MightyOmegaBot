@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include <cstring>
+#include <cstdint>
 
 
 #if defined(_WIN32)
