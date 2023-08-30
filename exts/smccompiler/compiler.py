@@ -56,7 +56,7 @@ CPU_IS_T = {
 }
 CPU_IS_FLAG_IGNORE = {
     "CALL",
-    "RET"
+    "RET",
     "SRA",
     "JMP",
     "JMPP",
@@ -199,7 +199,6 @@ def precompile(code_struct: list[dict[str, int | list[str]]]):
                 else:
                     raise Exception("Something went wrong during compilation")
 
-                # unique SRA instruction behaviour
                 if p_struct["comp"][0].upper() not in CPU_IS_FLAG_IGNORE:
                     p_struct["flag"] = 1
                 else:
