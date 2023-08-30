@@ -24,6 +24,8 @@ CPU_IS = {
     "ABS": 36,
     "UI": 48,
     "UO": 49,
+    "UOC": 50,
+    "UOCR": 51,
     "PRW": 112,
     "PRR": 113,
     "HALT": 127
@@ -40,6 +42,8 @@ CPU_IS_D = {
     "ABS",
     "UI",
     "UO",
+    "UOC",
+    "UOCR",
     "PRW",
     "PRR"
 }
@@ -84,7 +88,10 @@ def decode(code: str) -> list[dict[str, int | list[str]]]:
     return decoded
 
 
-def precompile(code_struct: list[dict[str, int | list[str]]]):
+def precompile(code: str):
+    # code structure
+    code_struct = decode(code)
+
     # Variables
     variable_pointers = {}
     variable_counter = 0
@@ -219,7 +226,7 @@ def precompile(code_struct: list[dict[str, int | list[str]]]):
     return precomp
 
 
-def to_bytecode(precomp: list):
+def split_bytecode(precomp: list):
     output: list[list[int]] = []
     for p_struct in precomp:
         output.append(
@@ -233,8 +240,11 @@ def to_bytecode(precomp: list):
     return output
 
 
-def precompile_code(code: str):
-    return precompile(decode(code))
+def bytecode(precomp: list):
+    output: list[int] = []
+    for inst in split_bytecode(precomp):
+        output.append((inst[0] << 15) + (inst[1] << 8) + inst[2])
+    return output
 
 
 def test():
@@ -268,7 +278,7 @@ halt:
         print(line)
     print()
 
-    for line in to_bytecode(decoded):
+    for line in split_bytecode(decoded):
         print(f"{line[0]: ^3} | {bin(line[1])[2:]:0>7} | {bin(line[2])[2:]:0>8}")
 
 

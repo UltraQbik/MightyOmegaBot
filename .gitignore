@@ -4,3 +4,8 @@ token.txt
 cogs/__pycache__/*
 cogs/logging/*
 /exts/smccompiler/.idea/
+/exts/smccompiler/MQ8B solution/.vs/
+/exts/smccompiler/MQ8B solution/MQ8B/x64/
+/exts/smccompiler/MQ8B solution/x64/Release/MQ8B.exp
+/exts/smccompiler/MQ8B solution/x64/Release/MQ8B.lib
+/exts/smccompiler/MQ8B solution/x64/Release/MQ8B.pdb
