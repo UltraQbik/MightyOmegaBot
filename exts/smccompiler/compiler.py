@@ -54,6 +54,16 @@ CPU_IS_T = {
     "ADC",
     "SBC"
 }
+CPU_IS_FLAG_IGNORE = {
+    "CALL",
+    "RET"
+    "SRA",
+    "JMP",
+    "JMPP",
+    "JMPZ",
+    "JMPN",
+    "JMPC",
+}
 
 
 def decode(code: str) -> list[dict[str, int | list[str]]]:
@@ -190,7 +200,7 @@ def precompile(code_struct: list[dict[str, int | list[str]]]):
                     raise Exception("Something went wrong during compilation")
 
                 # unique SRA instruction behaviour
-                if p_struct["comp"][0] != "SRA":
+                if p_struct["comp"][0].upper() not in CPU_IS_FLAG_IGNORE:
                     p_struct["flag"] = 1
                 else:
                     p_struct["flag"] = 0
