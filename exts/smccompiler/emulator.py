@@ -2,7 +2,10 @@ import os
 import ctypes
 
 
-dll = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), "MQ8B solution/x64/Release/MQ8B.dll"))
+if os.name == "nt":
+    dll = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), "MQ8B solution/x64/Release/MQ8B.dll"))
+else:
+    dll = ctypes.CDLL(os.path.join(os.path.dirname(os.path.realpath(__file__)), "MQ8B solution/x64/Release/MQ8B.so"))
 
 dll.emulate_mq8b.argtypes = [ctypes.POINTER(ctypes.c_uint16)]
 dll.emulate_mq8b.restype = ctypes.POINTER(ctypes.c_char)
