@@ -9,11 +9,24 @@ class EXTCompiler(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-    @commands.command(name="smcc8")
+    @commands.command(name="smc")
     @commands.cooldown(1, 3, commands.BucketType.user)
-    async def smcc8(self, ctx: commands.context.Context, *, code: str):
-        # remove the '```'
-        code = code.lstrip("`").rstrip("`")
+    async def smc(self, ctx: commands.context.Context, *, code: str | None = None):
+        # if the argument was given (aka the code is inside the message)
+        if code:
+            # remove the '```'
+            code = code.lstrip("`").rstrip("`")
+
+        # if the code was inside the attachment
+        else:
+            # check if there are any attachments
+            if len(ctx.message.attachments) > 0:
+                # .replace("\r\n", "\n") cuz sometimes that's a thing
+                code = (await ctx.message.attachments[0].read()).decode("utf-8").replace("\r\n", "\n")
+
+            # if there are no attachments, raise an error
+            else:
+                raise commands.MissingRequiredArgument(commands.Parameter("code", commands.Parameter.POSITIONAL_ONLY))
 
         # try to compile the code
         try:
@@ -60,11 +73,16 @@ class EXTCompiler(commands.Cog):
                                          filename="compiler_output.txt"),
                        reference=ctx.message)
 
-    @smcc8.error
-    async def smcc8_handler(self, ctx, error):
+    @smc.error
+    async def smc_handler(self, ctx, error):
         if isinstance(error, commands.CommandOnCooldown):
             embed = discord.Embed(title="Be patient!",
                                   description=f"Please wait: {error.retry_after:.2f} seconds",
+                                  color=discord.Color.orange())
+            await ctx.send(embed=embed, reference=ctx.message)
+        elif isinstance(error, commands.MissingRequiredArgument):
+            embed = discord.Embed(title="No code was given",
+                                  description="You forgot to provide the source code",
                                   color=discord.Color.orange())
             await ctx.send(embed=embed, reference=ctx.message)
         else:
@@ -73,11 +91,24 @@ class EXTCompiler(commands.Cog):
                                   color=discord.Color.orange())
             await ctx.send(embed=embed, reference=ctx.message)
 
-    @commands.command(name="smce8")
+    @commands.command(name="sme")
     @commands.cooldown(1, 5, commands.BucketType.user)
-    async def smce8(self, ctx: commands.context.Context, *, code: str):
-        # remove the '```'
-        code = code.lstrip("`").rstrip("`")
+    async def sme(self, ctx: commands.context.Context, *, code: str | None = None):
+        # if the argument was given (aka the code is inside the message)
+        if code:
+            # remove the '```'
+            code = code.lstrip("`").rstrip("`")
+
+        # if the code was inside the attachment
+        else:
+            # check if there are any attachments
+            if len(ctx.message.attachments) > 0:
+                # .replace("\r\n", "\n") cuz sometimes that's a thing
+                code = (await ctx.message.attachments[0].read()).decode("utf-8").replace("\r\n", "\n")
+
+            # if there are no attachments, raise an error
+            else:
+                raise commands.MissingRequiredArgument(commands.Parameter("code", commands.Parameter.POSITIONAL_ONLY))
 
         # try to compile the code
         try:
@@ -95,18 +126,10 @@ class EXTCompiler(commands.Cog):
                                          filename="terminal_output.txt"),
                        reference=ctx.message)
 
-    @smce8.error
-    async def smcc8_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            embed = discord.Embed(title="Be patient!",
-                                  description=f"Please wait: {error.retry_after:.2f} seconds",
-                                  color=discord.Color.orange())
-            await ctx.send(embed=embed, reference=ctx.message)
-        else:
-            embed = discord.Embed(title="ded...",
-                                  description=f"idk what happened, it ded. {type(error)}",
-                                  color=discord.Color.orange())
-            await ctx.send(embed=embed, reference=ctx.message)
+    @sme.error
+    async def sme_handler(self, ctx, error):
+        # it's basically the same thing
+        await self.smc_handler(ctx, error)
 
 
 async def setup(client: commands.Bot) -> None:

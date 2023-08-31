@@ -8,7 +8,7 @@ from discord import app_commands
 
 class Client(commands.Bot):
     def __init__(self):
-        super(Client, self).__init__(command_prefix="!!", intents=discord.Intents.all(),
+        super(Client, self).__init__(command_prefix="!", intents=discord.Intents.all(),
                                      help_command=None)
 
         # stores of list of all exts
