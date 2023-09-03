@@ -4,6 +4,8 @@ token.txt
 cogs/__pycache__/*
 cogs/logging/*
 /exts/smccompiler/.idea/
-/exts/smccompiler/MQ8B solution/.vs/
-/exts/smccompiler/MQ8B solution/x64/
-/exts/smccompiler/MQ8B solution/MQ8B/x64/
+/exts/smccompiler/mq8b_solution/.vs/
+/exts/smccompiler/mq8b_solution/x64/
+/exts/smccompiler/mq8b_solution/MQ8B/x64/
+/exts/smccompiler/emulator.so
+/exts/smccompiler/emulator.dll

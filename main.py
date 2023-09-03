@@ -30,18 +30,6 @@ class Client(commands.Bot):
                 # with the name being the name of the folder it's in
                 self.working_extensions[folder] = f"exts.{folder}.main"
 
-            # NOTE: This is a bit way too over-engineered
-            # if os.path.isfile(f"exts/{folder}/extension.cfg"):
-            #     # read the config file
-            #     config = ConfigParser()
-            #     config.read(f"exts/{folder}/extension.cfg")
-            #
-            #     # check if config contains the extension name
-            #     if config.has_section("DEFAULT") and config["DEFAULT"].get("ExtensionName") is not None \
-            #        and os.path.isfile(f"exts/{folder}/compiler.py"):
-            #         # write it to the list of working extensions
-            #         self.working_extensions[config["DEFAULT"]["ExtensionName"]] = f"exts.{folder}.compiler.py"
-
     async def load_custom_extension(self, name):
         await self.load_extension(self.working_extensions[name])
 
