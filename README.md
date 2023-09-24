@@ -3,6 +3,7 @@
 
 
 # How to make it work
- Compile some stuff in exts/smccompiler/MQ8B solution/MQ8B/src
+ cmake and make files are too hard, so just compile .cpp file in exts/smccompiler/mq8b_solution/MQ8B/src
+ and put the .dll or .so file into exts/smccompiler folder
 
  Add your bot token as the first argument. Ex. "main.py [token here]"
