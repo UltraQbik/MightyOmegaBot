@@ -7,5 +7,5 @@ cogs/logging/*
 /exts/smccompiler/mq8b_solution/.vs/
 /exts/smccompiler/mq8b_solution/x64/
 /exts/smccompiler/mq8b_solution/MQ8B/x64/
-/exts/smccompiler/emulator.so
-/exts/smccompiler/emulator.dll
+/exts/smccompiler/_emulator.so
+/exts/smccompiler/_emulator.dll

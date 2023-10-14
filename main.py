@@ -17,7 +17,12 @@ class Client(commands.Bot):
 
         # stores the list of exts loaded by default
         # format: ["extension1", "extension2", ...]
-        self.loaded_extensions: list[str] = ["minesweeper", "ping", "smccompiler"]
+        self.loaded_extensions: list[str] = [
+            "minesweeper",
+            "ping",
+            "smccompiler",
+            "helpcmd"
+        ]
 
         # check all the installed extensions
         self.check_working_extensions()
