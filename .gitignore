@@ -2,7 +2,7 @@
 token.txt
 build/
 .idea/*
-cogs/__pycache__/*
+__pycache__/
 cogs/logging/*
 /exts/smccompiler/.idea/
 /exts/smccompiler/mq8b_solution/.vs/

@@ -1,5 +1,5 @@
-from typing import List
-from point import Point
+from typing import List, Iterator
+from exts.snake.point import Point
 
 
 class Direction:
@@ -29,4 +29,10 @@ class Player:
                 self.body.append(Point((self.body[-1],x + 1, self.body[-1].y)))
         if not food_collide:
             self.body.pop()
+
+    def __len__(self) -> int:
+        return len(self.body)
+    
+    def __iter__(self) -> Iterator:
+        return iter(self.body)
 

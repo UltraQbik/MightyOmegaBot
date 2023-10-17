@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from exts.minesweeper.field import Field
+from exts.snake.snake import Snake
 
 
 class EXTSnake(commands.Cog):
@@ -15,7 +15,8 @@ class EXTSnake(commands.Cog):
         self,
         interaction: discord.Interaction,
     ) -> None:
-        await interaction.response.send_message("TODO: Create snake")
+        snake: Snake = Snake()
+        await interaction.response.send_message(f"Snake:\n{snake}")
 
 
 async def setup(client: commands.Bot) -> None:
