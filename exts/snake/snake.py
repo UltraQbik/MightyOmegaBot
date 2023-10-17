@@ -24,10 +24,17 @@ class Snake:
         self.player: Player = Player(start_pos)
         self.direction: Direction = start_direction
         self.field_size: int = field_size
-        self.food: Point = Point(
-            (randint(0, field_size), randint(0, field_size))
-        )
         self.style = style
+        self.generate_food()
+
+    def generate_food(self) -> None:
+        while True:
+            food = Point(
+                (randint(0, self.field_size - 1), randint(0, self.field_size - 1))
+            )
+            if food not in self.player:
+                break
+        self.food = food
 
     def check_collisions(self) -> None:
         collided_points: set = set(self.player.body + [self.food])
