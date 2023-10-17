@@ -37,8 +37,8 @@ class Snake:
         self.food = food
 
     def check_collisions(self) -> None:
-        collided_points: set = set(self.player.body + [self.food])
-        if len(collided_points) < len(self.player) + 1:
+        collided_points: set = set(self.player.body)
+        if len(collided_points) < len(self.player):
             return True
         for point in self.player:
             for coordinate in point.point:
@@ -46,8 +46,13 @@ class Snake:
                     return True
         return False
 
+    def check_food_collision(self) -> None:
+        return self.player[-1] == self.food
+
     def do_tick(self) -> None:
-        self.player.move(self.direction)
+        if food_collision := self.check_food_collision():
+            self.generate_food()
+        self.player.move(self.direction, food_collision)
         if self.check_collisions():
             raise CollisionException
 
@@ -58,10 +63,10 @@ class Snake:
             points_list.append(point.point)
         for y in range(self.field_size):
             for x in range(self.field_size):
-                if (x, y) == self.food.point:
-                    out += self.style["food"]
-                elif (x, y) in points_list:
+                if (x, y) in points_list:
                     out += self.style["snake"]
+                elif (x, y) == self.food.point:
+                    out += self.style["food"]
                 else:
                     out += self.style["space"]
             out += "\n"

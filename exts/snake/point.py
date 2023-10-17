@@ -7,9 +7,17 @@ class Point:
 
     @property
     def x(self) -> int:
-        return self.point[x]
+        return self.point[0]
 
     @property
     def y(self) -> int:
-        return self.point[y]
+        return self.point[1]
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Point):
+            return False
+        return self.point == other.point
+
+    def __hash__(self) -> int:
+        return self.x**self.y
 
