@@ -27,7 +27,7 @@ class EXTSnake(commands.Cog):
         try:
             while True:
                 snake.do_tick()
-                message = await message.edit(content=f"Snake:\n{snake}")
+                message = await message.edit(content=f"Snake:\n{snake}\nScore: {snake.score}")
                 await asyncio.sleep(1)
         except CollisionException:
             await message.edit(content=f"{message.content}\nGame over!")

@@ -26,6 +26,7 @@ class Snake:
         self.field_size: int = field_size
         self.style = style
         self.generate_food()
+        self.score = 0
 
     def generate_food(self) -> None:
         while True:
@@ -52,6 +53,7 @@ class Snake:
     def do_tick(self) -> None:
         if food_collision := self.check_food_collision():
             self.generate_food()
+            self.score += 1
         self.player.move(self.direction, food_collision)
         if self.check_collisions():
             raise CollisionException
