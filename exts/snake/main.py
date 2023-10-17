@@ -47,13 +47,17 @@ class EXTSnake(commands.Cog):
         snake = self.sessions[payload.message_id]
         match payload.emoji.name:
             case "⬅️":
-                snake.direction = Direction.LEFT
+                if snake.direction != Direction.RIGHT:
+                    snake.direction = Direction.LEFT
             case "⬆️":
-                snake.direction = Direction.UP
+                if snake.direction != Direction.DOWN:
+                    snake.direction = Direction.UP
             case "⬇️":
-                snake.direction = Direction.DOWN
+                if snake.direction != Direction.UP:
+                    snake.direction = Direction.DOWN
             case "➡️":
-                snake.direction = Direction.RIGHT
+                if snake.direction != Direction.LEFT:
+                    snake.direction = Direction.RIGHT
 
 
 async def setup(client: commands.Bot) -> None:

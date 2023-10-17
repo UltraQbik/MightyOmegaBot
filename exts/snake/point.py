@@ -19,5 +19,5 @@ class Point:
         return self.point == other.point
 
     def __hash__(self) -> int:
-        return self.x**self.y
+        return self.x**(abs(self.y) + 1)
 
