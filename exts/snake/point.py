@@ -20,4 +20,3 @@ class Point:
 
     def __hash__(self) -> int:
         return self.x**(abs(self.y) + 1)
-

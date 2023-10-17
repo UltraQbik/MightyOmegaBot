@@ -27,7 +27,9 @@ class EXTSnake(commands.Cog):
         try:
             while True:
                 snake.do_tick()
-                message = await message.edit(content=f"Snake:\n{snake}\nScore: {snake.score}")
+                message = await message.edit(
+                    content=f"Snake:\n{snake}\nScore: {snake.score}"
+                )
                 await asyncio.sleep(1)
         except CollisionException:
             await message.edit(content=f"{message.content}\nGame over!")
@@ -39,7 +41,9 @@ class EXTSnake(commands.Cog):
         self,
         payload: discord.RawReactionActionEvent
     ) -> None:
-        if payload.message_id not in self.sessions or payload.emoji.name not in "⬅️⬆️⬇️➡️" or not payload.member:
+        if payload.message_id not in self.sessions or \
+           payload.emoji.name not in "⬅️⬆️⬇️➡️" or \
+           not payload.member:
             return
         channel = await self.client.fetch_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)

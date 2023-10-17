@@ -31,7 +31,10 @@ class Snake:
     def generate_food(self) -> None:
         while True:
             food = Point(
-                (randint(0, self.field_size - 1), randint(0, self.field_size - 1))
+                (
+                    randint(0, self.field_size - 1),
+                    randint(0, self.field_size - 1)
+                )
             )
             if food not in self.player:
                 break

@@ -32,10 +32,9 @@ class Player:
 
     def __len__(self) -> int:
         return len(self.body)
-    
+
     def __iter__(self) -> Iterator:
         return iter(self.body)
 
     def __getitem__(self, key) -> Point:
         return self.body[key]
-
