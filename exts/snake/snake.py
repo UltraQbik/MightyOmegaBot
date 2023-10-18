@@ -16,9 +16,9 @@ class Snake:
         start_direction: Direction = Direction.DOWN,
         field_size: int = 9,
         style: Dict[str, str] = {
-            "snake": ":black_large_square:",
-            "food": ":red_square:",
-            "space": ":white_large_square:"
+            "snake": "⬛",
+            "food": "🟥",
+            "space": "⬜"
         }
     ) -> None:
         self.player: Player = Player(start_pos)

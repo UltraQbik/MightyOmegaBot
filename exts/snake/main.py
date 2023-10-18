@@ -14,11 +14,19 @@ class EXTSnake(commands.Cog):
     @app_commands.command(
         name="snake",
         description="play snake")
+    @app_commands.describe(
+        size="Size of field. Can be number from 2 to 14 (default: 9)")
     async def snake(
         self,
         interaction: discord.Interaction,
+        size: int = 9
     ) -> None:
-        snake: Snake = Snake()
+        if size < 2 or size > 14:
+            await interaction.response.send_message(
+                "Size should be number from 1 to 14",
+                ephemeral=True
+            )
+        snake: Snake = Snake(field_size=size)
         await interaction.response.send_message(f"Snake:\n{snake}")
         message = await interaction.original_response()
         for emoji in "⬅️", "⬇️", "⬆️", "➡️":
@@ -48,6 +56,8 @@ class EXTSnake(commands.Cog):
         channel = await self.client.fetch_channel(payload.channel_id)
         message = await channel.fetch_message(payload.message_id)
         await message.remove_reaction(payload.emoji, payload.member)
+        if payload.message_id not in self.sessions:
+            return
         snake = self.sessions[payload.message_id]
         match payload.emoji.name:
             case "⬅️":
