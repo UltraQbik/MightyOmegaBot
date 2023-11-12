@@ -21,7 +21,8 @@ class Client(commands.Bot):
             "minesweeper",
             "ping",
             "smccompiler",
-            "helpcmd"
+            "helpcmd",
+            "rofl"
         ]
 
         # check all the installed extensions
