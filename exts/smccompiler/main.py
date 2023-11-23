@@ -63,7 +63,7 @@ class EXTCompiler(commands.Cog):
 
         bc = f"\n{'- Bytecode version -':=^32}\n"
         for idx, line in enumerate(decoded):
-            bc += f"{idx:0>4} | {line[0]: ^3} | {bin(line[1])[2:]:0>7} | {bin(line[2])[2:]:0>8}\n"
+            bc += f"{idx:0>4} | {line[0]: ^3} | {bin(line[2])[2:]:0>8} | {bin(line[1])[2:]:0>7}\n"
 
         # write to the compiler output
         compiler_output += bc

@@ -22,6 +22,7 @@ class Client(commands.Bot):
             "ping",
             "smccompiler",
             "helpcmd",
+            "rofl",
             "snake"
         ]
 
