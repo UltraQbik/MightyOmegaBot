@@ -50,14 +50,10 @@ class Snake:
                     return True
         return False
 
-    def check_food_collision(self) -> None:
-        return self.player[-1] == self.food
-
     def do_tick(self) -> None:
-        if food_collision := self.check_food_collision():
+        if food_collision := self.player.move(self.direction, self.food):
             self.generate_food()
             self.score += 1
-        self.player.move(self.direction, food_collision)
         if self.check_collisions():
             raise CollisionException
 
@@ -76,4 +72,3 @@ class Snake:
                     out += self.style["space"]
             out += "\n"
         return out[:-1]
-

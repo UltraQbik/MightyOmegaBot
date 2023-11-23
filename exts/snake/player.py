@@ -16,7 +16,7 @@ class Player:
     def move(
         self,
         direction: Direction,
-        food_collide: bool
+        food: Point
     ) -> None:
         match direction:
             case Direction.LEFT:
@@ -27,8 +27,10 @@ class Player:
                 self.body.append(Point((self.body[-1].x, self.body[-1].y - 1)))
             case Direction.RIGHT:
                 self.body.append(Point((self.body[-1].x + 1, self.body[-1].y)))
-        if not food_collide:
+        food_collision = food == self[-1]
+        if not food_collision:
             self.body.pop(0)
+        return food_collision
 
     def __len__(self) -> int:
         return len(self.body)

@@ -76,4 +76,3 @@ class EXTSnake(commands.Cog):
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(EXTSnake(client))
-
