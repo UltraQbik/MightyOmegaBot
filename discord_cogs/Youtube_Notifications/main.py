@@ -25,6 +25,8 @@ class EXTYoutubeModule(commands.Cog):
     async def check(self):
         """ Checks every minute for a new video, from channels in 'channels.txt' """
 
+        get
+
         # Unnecessary; Update channel list every minute
         # self.channels = get_yt_channels()
         discord_channel = self.client.get_channel(863394227655933994)
@@ -41,8 +43,9 @@ class EXTYoutubeModule(commands.Cog):
                 if video_id not in self.videos[channel_name]:
                     url = f"https://youtu.be/{video_id}"
 
+                    # ye, roles are not fully supported just yet
                     await discord_channel.send(
-                        f"<@1101231667554828410><@1110299526721449984>\n"
+                        f"<@&1101231667554828410><@&1110299526721449984>\n"
                         f"\n"
                         f"# :fire: Новое видео на канале {channel_name}! :fire:\n"
                         f"# [Ссылочка в сибирь :>]({url})"
