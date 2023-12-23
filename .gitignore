@@ -4,9 +4,3 @@ build/
 .idea/*
 cogs/__pycache__/*
 cogs/logging/*
-/exts/smccompiler/.idea/
-/exts/smccompiler/mq8b_solution/.vs/
-/exts/smccompiler/mq8b_solution/x64/
-/exts/smccompiler/mq8b_solution/MQ8B/x64/
-/exts/smccompiler/_emulator.so
-/exts/smccompiler/_emulator.dll
