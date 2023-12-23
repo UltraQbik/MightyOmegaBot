@@ -3,7 +3,6 @@ import os
 import sys
 import discord
 from discord.ext import commands
-from discord import app_commands
 
 
 GLOBAL_CONFIG = {}
@@ -87,7 +86,7 @@ def parse_config_file(filepath: str):
 def main():
     # Useless message at the start of the bot
     if os.name != "nt":
-        print("NOTE: You are running on non-windows machine, some of the things can be buggy\n"
+        print("NOTE: You are running on non-windows machine, some of the things may be buggy\n"
               "Please report any issues on 'https://github.com/UltraQbik/MigthyOmegaBot/issues'\n\n")
 
     # Load all configs from 'discord configs'
