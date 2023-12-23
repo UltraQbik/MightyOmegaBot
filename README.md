@@ -1,4 +1,4 @@
-# MigthyOmegaBot
+# MightyOmegaBot
 - The Mighty Omega Discord Bot
 - Because not having a bot is silly
 - And other ones are not good enough for me
