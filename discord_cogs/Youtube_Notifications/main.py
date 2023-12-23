@@ -25,8 +25,6 @@ class EXTYoutubeModule(commands.Cog):
     async def check(self):
         """ Checks every minute for a new video, from channels in 'channels.txt' """
 
-        get
-
         # Unnecessary; Update channel list every minute
         # self.channels = get_yt_channels()
         discord_channel = self.client.get_channel(863394227655933994)
