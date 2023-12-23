@@ -4,7 +4,6 @@ import sys
 import discord
 from discord.ext import commands
 from discord import app_commands
-from configparser import ConfigParser
 
 
 GLOBAL_CONFIG = {}
@@ -32,12 +31,12 @@ class Client(commands.Bot):
         self.check_working_extensions()
 
     def check_working_extensions(self):
-        for folder in os.listdir("discord_cogs"):
+        for folder in os.listdir("client_cogs"):
             # check if main file exists
-            if os.path.isfile(f"discord_cogs/{folder}/main.py"):
+            if os.path.isfile(f"client_cogs/{folder}/main.py"):
                 # import the extension to the list of working extensions
                 # with the name being the name of the folder it's in
-                self.working_extensions[folder] = f"discord_cogs.{folder}.main"
+                self.working_extensions[folder] = f"client_cogs.{folder}.main"
 
     async def load_custom_extension(self, name):
         await self.load_extension(self.working_extensions[name])
@@ -93,9 +92,9 @@ def main():
 
     # Load all configs from 'discord configs'
     global GLOBAL_CONFIG
-    for file in os.listdir("discord_configs"):
-        if os.path.isfile(f"discord_configs/{file}"):
-            GLOBAL_CONFIG[os.path.splitext(file)[0]] = parse_config_file(f"discord_configs/{file}")
+    for file in os.listdir("client_configs"):
+        if os.path.isfile(f"client_configs/{file}"):
+            GLOBAL_CONFIG[os.path.splitext(file)[0]] = parse_config_file(f"client_configs/{file}")
 
     client = Client()
     client.run(sys.argv[1])

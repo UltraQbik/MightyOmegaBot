@@ -3,7 +3,7 @@ from discord.ext import commands, tasks
 
 
 def get_yt_channels() -> dict[str, str]:
-    with open("discord_cogs/Youtube_Notifications/channels.txt", "r") as file:
+    with open("client_cogs/Youtube_Notifications/channels.txt", "r") as file:
         channel_list = file.read().replace("\r\n", "\n").split("\n")
         channels = {}
         for entry in channel_list:
@@ -21,6 +21,8 @@ class EXTYoutubeModule(commands.Cog):
         self.channels: dict[str, str] = get_yt_channels()
         self.videos: dict[str, list[str]] = {}
 
+        self.check.start()
+
     @tasks.loop(minutes=1)
     async def check(self):
         """ Checks every minute for a new video, from channels in 'channels.txt' """
@@ -29,7 +31,7 @@ class EXTYoutubeModule(commands.Cog):
         # self.channels = get_yt_channels()
         discord_channel = self.client.get_channel(863394227655933994)
 
-        for channel_name, channel_url in self.channels:
+        for channel_name, channel_url in self.channels.items():
             videos = scrapetube.get_channel(channel_url=channel_url, limit=5)
             video_ids = [video["videoId"] for video in videos]
 

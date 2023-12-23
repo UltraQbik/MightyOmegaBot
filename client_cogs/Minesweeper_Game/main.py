@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from discord_cogs.Minesweeper_Game.field import Field
+from client_cogs.Minesweeper_Game.field import Field
 
 
 class EXTMinesweeper(commands.Cog):
