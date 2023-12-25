@@ -87,7 +87,7 @@ def main():
     # Useless message at the start of the bot
     if os.name != "nt":
         print("NOTE: You are running on non-windows machine, some of the things may be buggy\n"
-              "Please report any issues on 'https://github.com/UltraQbik/MigthyOmegaBot/issues'\n\n")
+              "Please report any issues on 'https://github.com/UltraQbik/MightyOmegaBot/issues'\n\n")
 
     # Load all configs from 'discord configs'
     global GLOBAL_CONFIG
