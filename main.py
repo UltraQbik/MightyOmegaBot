@@ -1,7 +1,7 @@
-import configparser
 import os
 import sys
 import discord
+import configparser
 from discord.ext import commands
 
 
