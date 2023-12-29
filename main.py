@@ -1,17 +1,17 @@
 import os
 import sys
 import discord
-import configparser
+import clientconfig
 from discord.ext import commands
-
-
-GLOBAL_CONFIG = {}
 
 
 class Client(commands.Bot):
     def __init__(self):
         super(Client, self).__init__(command_prefix="!", intents=discord.Intents.all(),
                                      help_command=None)
+
+        # load the config files
+        self.config = clientconfig.get_config()
 
         # list of all discord cogs
         # format: {"extension": "filepath"}
@@ -54,13 +54,13 @@ class Client(commands.Bot):
         print("\nBot started successfully!\n")
         await self.change_presence(activity=discord.Game("God Revision 2"))
 
-        sync = await self.tree.sync()
-        print(f"Slash command tree synced {len(sync)} commands\n")
+        # sync = await self.tree.sync()
+        # print(f"Slash command tree synced {len(sync)} commands\n")
 
         print("User membership test")
         for guild in self.guilds:
             try:
-                role_id = int(GLOBAL_CONFIG["roles config"][guild.id.__str__()]["DiscordMemberRole"])
+                role_id = int(self.config["roles"][guild.id.__str__()]["DiscordMemberRole"])
             except KeyError:
                 print(f"\tGuild '{guild.name}' doesn't have roles configured", end="\n\n")
                 continue
@@ -71,16 +71,9 @@ class Client(commands.Bot):
                     print(f"\tAdded role to: {member.id} / {member.display_name}")
         print("Done!\n")
 
-    @staticmethod
-    async def on_member_join(member: discord.Member):
-        role_id = int(GLOBAL_CONFIG["roles config"][member.guild.id.__str__()]["DiscordMemberRole"])
+    async def on_member_join(self, member: discord.Member):
+        role_id = int(self.config["roles"][member.guild.id.__str__()]["DiscordMemberRole"])
         await member.add_roles(member.guild.get_role(role_id))
-
-
-def parse_config_file(filepath: str):
-    config = configparser.ConfigParser()
-    config.read(filepath)
-    return config
 
 
 def main():
@@ -88,12 +81,6 @@ def main():
     if os.name != "nt":
         print("NOTE: You are running on non-windows machine, some of the things may be buggy\n"
               "Please report any issues on 'https://github.com/UltraQbik/MightyOmegaBot/issues'\n\n")
-
-    # Load all configs from 'discord configs'
-    global GLOBAL_CONFIG
-    for file in os.listdir("client_configs"):
-        if os.path.isfile(f"client_configs/{file}"):
-            GLOBAL_CONFIG[os.path.splitext(file)[0]] = parse_config_file(f"client_configs/{file}")
 
     client = Client()
     client.run(sys.argv[1])
