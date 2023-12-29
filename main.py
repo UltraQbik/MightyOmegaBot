@@ -54,8 +54,8 @@ class Client(commands.Bot):
         print("\nBot started successfully!\n")
         await self.change_presence(activity=discord.Game("God Revision 2"))
 
-        # sync = await self.tree.sync()
-        # print(f"Slash command tree synced {len(sync)} commands\n")
+        sync = await self.tree.sync()
+        print(f"Slash command tree synced {len(sync)} commands\n")
 
         print("User membership test")
         for guild in self.guilds:
