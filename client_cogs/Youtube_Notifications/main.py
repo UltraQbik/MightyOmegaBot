@@ -33,7 +33,11 @@ class EXTYoutubeModule(commands.Cog):
 
         for channel_name, channel_url in self.channels.items():
             videos = scrapetube.get_channel(channel_url=channel_url, limit=5)
-            video_ids = [video["videoId"] for video in videos]
+            try:
+                video_ids = [video["videoId"] for video in videos]
+            except Exception as e:
+                print(f"Another BS error from somewhere: {e}")
+                continue
 
             if self.check.current_loop == 0:
                 self.videos[channel_name] = video_ids
