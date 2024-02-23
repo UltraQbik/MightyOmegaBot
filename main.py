@@ -23,7 +23,8 @@ class Client(commands.Bot):
             "Minesweeper_Game",
             "Help_Command",
             "Rofl_Commands",
-            "Youtube_Notifications"
+            "Youtube_Notifications",
+            "LaTeX_Converter"
         ]
 
         # check all the installed extensions
