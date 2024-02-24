@@ -13,7 +13,7 @@ class EXTLatexConverter(commands.Cog):
     async def latex_cmd(self, interaction: discord.Interaction, text: str):
         try:
             sympy.preview(
-                text,
+                f"$${text}$$",
                 output="png",
                 viewer="file",
                 filename="image.png",
@@ -28,7 +28,6 @@ class EXTLatexConverter(commands.Cog):
                 out,
                 ephemeral=True
             )
-            print(f"")
         else:
             with open("image.png", "rb") as f:
                 await interaction.response.send_message(
