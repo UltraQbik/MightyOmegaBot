@@ -1,18 +1,23 @@
+import json
 import scrapetube
 from discord.ext import commands, tasks
 
 
 def read_config() -> dict[int, dict[str, dict[str, str]]]:
-    with open("client_configs/youtube_notifier.json") as file:
+    with open("client_cogs/Youtube_Notifications/config.json") as file:
         config = json.load(file)
-    return config
+
+    out_config = {}
+    for channel_id in config:
+        out_config[int(channel_id)] = config[channel_id]
+
+    return out_config
 
 
 class EXTYoutubeModule(commands.Cog):
     """
     Class that checks every minute for a new video.
-    It has config in client_configs/youtube_notofier.json, which looks
-    something like this:
+    It has config in config.json, which looks something like this:
     {
         discord_channel_id:
         {
