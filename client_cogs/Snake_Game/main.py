@@ -2,8 +2,8 @@ import asyncio
 import discord
 from discord.ext import commands
 from discord import app_commands
-from exts.snake.snake import Snake, CollisionException
-from exts.snake.player import Direction
+from client_cogs.Snake_Game.snake import Snake, CollisionException
+from client_cogs.Snake_Game.player import Direction
 
 
 class EXTSnake(commands.Cog):

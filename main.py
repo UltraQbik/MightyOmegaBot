@@ -24,7 +24,7 @@ class Client(commands.Bot):
             "Help_Command",
             "Rofl_Commands",
             "Youtube_Notifications",
-            "snake"
+            "Snake_Game"
         ]
 
         # check all the installed extensions
@@ -102,7 +102,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-<<<<<<< HEAD
-
-=======
->>>>>>> main

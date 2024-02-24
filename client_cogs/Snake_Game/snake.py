@@ -1,7 +1,7 @@
 from typing import List, Tuple, Dict
 from random import randint
-from exts.snake.player import Direction, Player
-from exts.snake.point import Point
+from client_cogs.Snake_Game.player import Direction, Player
+from client_cogs.Snake_Game.point import Point
 
 
 class CollisionException(Exception):

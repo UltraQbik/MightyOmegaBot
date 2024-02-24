@@ -1,5 +1,5 @@
 from typing import List, Iterator
-from exts.snake.point import Point
+from client_cogs.Snake_Game.point import Point
 
 
 class Direction:
