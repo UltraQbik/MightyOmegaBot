@@ -7,6 +7,11 @@ class EXTRofl(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
+    @app_commands.command(name="ping", description="pong!")
+    async def ping(self, interaction: discord.Interaction):
+        await interaction.response.send_message(
+            f"Pong {interaction.user.mention}! {self.client.latency * 1000:.2f} ms")
+
     @app_commands.command(name="bk", description="boykisser")
     async def bk(self, interaction: discord.Interaction):
         await interaction.response.send_message(
