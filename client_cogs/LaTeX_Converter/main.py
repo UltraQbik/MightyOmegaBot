@@ -1,23 +1,34 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-import pnglatex
+import sympy
 
 
-class EXTHelpcmd(commands.Cog):
+class EXTLatexConverter(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
     @app_commands.command(name="latex", description="converts LaTeX to image")
     @app_commands.describe(text="LaTeX formatted text")
-    async def help_cmd(self, text: str, interaction: discord.Interaction):
+    async def latex_cmd(self, interaction: discord.Interaction, text: str):
         try:
-            pnglatex.pnglatex(text, "image.png")
-        except ValueError as exc:
+            sympy.preview(
+                text,
+                output="png",
+                viewer="file",
+                filename="image.png",
+                euler=False,
+                dvioptions=['-D', '400']
+            )
+        except RuntimeError as exc:
+            text = str(exc).replace('\\n', '\n')
+            out = text[text.find('! '):]
+            out = out[:out.find('\n')]
             await interaction.response.send_message(
-                str(exc),
+                out,
                 ephemeral=True
             )
+            print(f"")
         else:
             with open("image.png", "rb") as f:
                 await interaction.response.send_message(
@@ -26,4 +37,4 @@ class EXTHelpcmd(commands.Cog):
 
 
 async def setup(client: commands.Bot) -> None:
-    await client.add_cog(EXTHelpcmd(client))
+    await client.add_cog(EXTLatexConverter(client))
