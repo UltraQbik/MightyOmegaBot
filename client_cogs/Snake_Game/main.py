@@ -38,7 +38,7 @@ class EXTSnake(commands.Cog):
                 message = await message.edit(
                     content=f"Snake:\n{snake}\nScore: {snake.score}"
                 )
-                await asyncio.sleep(1)
+                await asyncio.sleep(3)
         except CollisionException:
             await message.edit(content=f"{message.content}\nGame over!")
         self.sessions.pop(message.id)
