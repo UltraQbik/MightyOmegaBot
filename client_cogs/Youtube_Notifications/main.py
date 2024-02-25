@@ -1,5 +1,7 @@
+import asyncio
 import json
 import scrapetube
+import discord
 from discord.ext import commands, tasks
 
 
@@ -36,13 +38,32 @@ class EXTYoutubeModule(commands.Cog):
         self.client = client
 
         self.config: dict[int, dict[str, dict[str, str]]] = read_config()
-        self.videos: dict[int, dict[str, list[str]]] = {}
+        self.videos: dict[int, dict[str, list[str]]] = {
+            channel_id: {
+                channel_name: [] for channel_name in self.config[channel_id]
+            } for channel_id in self.config
+        }
 
         self.discord_channels = []
-        for channel_id in self.config:
-            self.discord_channels.append(self.client.get_channel(channel_id))
+
+        asyncio.get_running_loop().create_task(self.get_channels())
 
         self.check.start()
+
+    async def get_channels(self):
+        self.discord_channels = []
+        for channel_id in self.config:
+            try:
+                self.discord_channels.append(
+                    await self.client.fetch_channel(channel_id)
+                )
+            except discord.errors.Forbidden:
+                print(f"Cannot get {channel_id} (Missing permissions)")
+            except discord.errors.NotFound:
+                print(f"Cannot get {channel_id} (Channel not found)")
+            else:
+                print(f"Added {channel_id}")
+
 
     @tasks.loop(minutes=1)
     async def check(self):
@@ -52,9 +73,12 @@ class EXTYoutubeModule(commands.Cog):
         # self.config = read_config()
 
         for channel in self.discord_channels:
+            if channel is None:
+                print("Skipping some channel, because it's None.")
+                continue
             for channel_name in self.config[channel.id]:
                 videos = scrapetube.get_channel(
-                    channel_url=self.config[channel][channel_name]["url"],
+                    channel_url=self.config[channel.id][channel_name]["url"],
                     limit=5
                 )
                 try:
@@ -63,20 +87,23 @@ class EXTYoutubeModule(commands.Cog):
                     print(f"Another BS error from somewhere: {e}")
                     continue
 
-                if self.check.current_loop == 0:
+                if self.check.current_loop <= 1:
                     self.videos[channel.id][channel_name] = video_ids
+                    continue
 
+                print(video_ids)
+                print(self.videos[channel.id][channel_name])
                 for video_id in video_ids:
                     if video_id in self.videos[channel.id][channel_name]:
                         continue
                     url = f"https://youtu.be/{video_id}"
 
-                    await discord_channel.send(
+                    await channel.send(
                         self.config[channel.id][channel_name]["video"].format(
                             channel_name, url
                         )
                     )
-                self.videos[channel.id][channel.name] = video_ids
+                self.videos[channel.id][channel_name] = video_ids
 
 
 async def setup(client: commands.Bot) -> None:
