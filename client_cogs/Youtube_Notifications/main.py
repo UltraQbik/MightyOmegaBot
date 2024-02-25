@@ -21,7 +21,7 @@ class EXTYoutubeModule(commands.Cog):
     Class that checks every minute for a new video.
     It has config in config.json, which looks something like this:
     {
-        discord_channel_id:
+        "discord_channel_id":
         {
             "Chanel_name":
             {
