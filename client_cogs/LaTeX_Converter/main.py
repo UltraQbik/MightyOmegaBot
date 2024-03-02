@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import sympy
+from PIL import Image, ImageOps
 
 
 class EXTLatexConverter(commands.Cog):
@@ -29,6 +30,13 @@ class EXTLatexConverter(commands.Cog):
                 ephemeral=True
             )
         else:
+            with Image.open("image.png") as img:
+                img_borders = ImageOps.expand(
+                    img,
+                    border=20,
+                    fill='white'
+                )
+                img_borders.save("image.png")
             with open("image.png", "rb") as f:
                 await interaction.response.send_message(
                     file=discord.File(f)
