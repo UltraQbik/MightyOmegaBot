@@ -4,3 +4,5 @@ build/
 .idea/*
 cogs/__pycache__/*
 cogs/logging/*
+*.pyc
+image.png
