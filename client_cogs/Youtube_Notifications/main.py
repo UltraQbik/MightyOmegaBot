@@ -91,8 +91,6 @@ class EXTYoutubeModule(commands.Cog):
                     self.videos[channel.id][channel_name] = video_ids
                     continue
 
-                print(video_ids)
-                print(self.videos[channel.id][channel_name])
                 for video_id in video_ids:
                     if video_id in self.videos[channel.id][channel_name]:
                         continue
