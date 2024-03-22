@@ -190,3 +190,7 @@ class EXTRemindMe(commands.Cog):
         # write updates to the database file
         with open(self.db_path, "w", encoding="utf8") as file:
             file.write(json.dumps(self.remindme_database, indent=2))
+
+
+async def setup(client: commands.Bot) -> None:
+    await client.add_cog(EXTRemindMe(client))
