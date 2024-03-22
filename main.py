@@ -13,6 +13,10 @@ class Client(commands.Bot):
         super(Client, self).__init__(command_prefix="!", intents=discord.Intents.all(),
                                      help_command=None)
 
+        # make sure the var directory is present
+        if not os.path.isdir("var"):
+            os.mkdir("var")
+
         # list of all discord cogs
         # format: {"extension": "filepath"}
         self.working_extensions: dict[str, str] = {}
@@ -23,8 +27,9 @@ class Client(commands.Bot):
             "Minesweeper_Game",
             "Help_Command",
             "Rofl_Commands",
-            "Youtube_Notifications",
-            "LaTeX_Converter"
+            # "Youtube_Notifications",  # too unstable
+            "LaTeX_Converter",
+            "Remind_Me"
         ]
 
         # check all the installed extensions
