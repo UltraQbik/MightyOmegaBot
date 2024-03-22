@@ -74,6 +74,11 @@ class EXTRemindMe(commands.Cog):
             if char.isdigit():
                 token += char
 
+            # DLC to add seconds
+            elif char == "s":
+                await interaction.response.send_message(f"To use seconds buy a DLC for 4.99$", ephemeral=True)
+                return
+
             # if it's a time specifier
             elif char in "YMDhms":
                 decoded_time[char] = int(token)
@@ -98,6 +103,11 @@ class EXTRemindMe(commands.Cog):
         # if the total amount of time is bigger than 10 years, give an error and die
         if total_seconds > 31557600:
             await interaction.response.send_message("I doubt the discord will exist for 10+ years.", ephemeral=True)
+            return
+
+        # if the total amount of seconds is 0, then give an error and *die*
+        if total_seconds == 0:
+            await interaction.response.send_message(f"To use instant reminders buy a DLC for 49.99$", ephemeral=True)
             return
 
         # check if user is already present
