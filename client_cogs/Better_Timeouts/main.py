@@ -52,6 +52,7 @@ class EXTBetterTimeouts(commands.Cog):
         user_embed = discord.Embed(title="Timeout!", description="You were put on a timeout",
                                    color=discord.Color.red())
         user_embed.add_field(name="Reason", value=reason, inline=True)
+        user_embed.add_field(name="Duration", value=duration.__str__())
         user_embed.set_author(name=interaction.user.name, icon_url=interaction.user.avatar.url)
 
         # try to send user a dm with a reason for a timeout

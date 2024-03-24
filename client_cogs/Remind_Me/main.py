@@ -78,7 +78,7 @@ class EXTRemindMe(commands.Cog):
         )
 
         # if the total amount of time is bigger than 10 years, give an error and die
-        if timed.total_seconds() > 31557600:
+        if timed.days > 3652:
             await interaction.response.send_message("I doubt the discord will exist for 10+ years.", ephemeral=True)
             return
 
