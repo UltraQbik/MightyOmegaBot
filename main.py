@@ -29,13 +29,18 @@ class Client(commands.Bot):
             "Rofl_Commands",
             # "Youtube_Notifications",  # too unstable
             "LaTeX_Converter",
-            "Remind_Me"
+            "Remind_Me",
+            "Better_Timeouts"
         ]
 
         # check all the installed extensions
         self.check_working_extensions()
 
     def check_working_extensions(self):
+        """
+        Checks all working extensions for the presence of main.py file
+        """
+
         for folder in os.listdir("client_cogs"):
             # check if main file exists
             if os.path.isfile(f"client_cogs/{folder}/main.py"):
@@ -44,25 +49,48 @@ class Client(commands.Bot):
                 self.working_extensions[folder] = f"client_cogs.{folder}.main"
 
     async def load_custom_extension(self, name):
+        """
+        Loads custom cog
+        """
+
         await self.load_extension(self.working_extensions[name])
 
     async def unload_custom_extension(self, name):
+        """
+        UnLoads custom cog
+        """
+
         await self.unload_extension(self.working_extensions[name])
 
     async def reload_custom_extension(self, name):
+        """
+        ReLoads custom cog
+        """
+
         await self.reload_extension(self.working_extensions[name])
 
     async def setup_hook(self) -> None:
+        """
+        Cog loading when the bot is launched
+        """
+
         for ext in self.loaded_extensions:
             await self.load_custom_extension(ext)
 
     async def on_ready(self) -> None:
+        """
+        Things that happen when the bot is launched
+        """
+
+        # change activity
         print("\nBot started successfully!\n")
         await self.change_presence(activity=discord.Game("God Revision 2"))
 
-        sync = await self.tree.sync()
-        print(f"Slash command tree synced {len(sync)} commands\n")
+        # sync the command tree
+        # sync = await self.tree.sync()
+        # print(f"Slash command tree synced {len(sync)} commands\n")
 
+        # check all the member's membership
         print("User membership test")
         for guild in self.guilds:
             try:
@@ -75,10 +103,16 @@ class Client(commands.Bot):
                 if role_id not in member._roles:
                     await member.add_roles(guild.get_role(role_id))
                     print(f"\tAdded role to: {member.id} / {member.display_name}")
+
+        # print the done message
         print("Done!\n")
 
     @staticmethod
     async def on_member_join(member: discord.Member):
+        """
+        When a new user joins
+        """
+
         role_id = int(GLOBAL_CONFIG["roles config"][member.guild.id.__str__()]["DiscordMemberRole"])
         await member.add_roles(member.guild.get_role(role_id))
 
