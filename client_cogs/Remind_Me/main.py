@@ -47,66 +47,43 @@ class EXTRemindMe(commands.Cog):
 
     @app_commands.command(name="remindme", description="Reminds you")
     @app_commands.describe(
-        timestamp="Time after which the reminder is sent. "
-                  "(Y - Year, M - month, d - day, h - hour, m - minute)",
-        message="Message that needs to be reminded")
+        message="Message that needs to be reminded",
+        minutes="In how many minutes to send a reminder (default is 1 minute)",
+        hours="In how many hours to send a reminder",
+        days="In how many days to send a reminder",
+        weeks="In how many weeks to send a reminder",
+        months="In how many months to send a reminder",
+        years="In how many years to send a reminder")
     async def remindme(
         self,
         interaction: discord.Interaction,
-        timestamp: str,
-        message: str
+        message: str,
+        minutes: int = 1,
+        hours: int = 0,
+        days: int = 0,
+        weeks: int = 0,
+        months: int = 0,
+        years: int = 0
     ) -> None:
         """
         This is the 'remind me' command implementation
         """
 
-        decoded_time = {
-            "Y": 0,     # year
-            "M": 0,     # month
-            "d": 0,     # day
-            "h": 0,     # hour
-            "m": 0,     # minute
-            # "s": 0      # second (I don't think it's needed?)
-        }
-        token = ""
-        for char in timestamp:
-            # if character is a digit
-            if char.isdigit():
-                token += char
-
-            # DLC to add seconds
-            elif char == "s":
-                await interaction.response.send_message(f"To use seconds buy a DLC for 4.99$", ephemeral=True)
-                return
-
-            # if it's a time specifier
-            elif char in "YMDhms":
-                decoded_time[char] = int(token)
-
-            # if it's a separator
-            elif char == " " and token != "":
-                token = ""
-
-            # if it's garbaje~
-            else:
-                await interaction.response.send_message(f"Unknown character '{char}'", ephemeral=True)
-                return
-
-        # calculate the total amount of time in seconds
-        total_seconds = decoded_time["Y"] * 31557600
-        total_seconds += decoded_time["M"] * 2628000
-        total_seconds += decoded_time["d"] * 86400
-        total_seconds += decoded_time["h"] * 3600
-        total_seconds += decoded_time["m"] * 60
-        # total_seconds += decoded_time["s"]
+        # timedelta
+        timed = timedelta(
+            minutes=minutes,
+            hours=hours,
+            days=days + (months * 30.436875) + (years * 365.2422),
+            weeks=weeks
+        )
 
         # if the total amount of time is bigger than 10 years, give an error and die
-        if total_seconds > 31557600:
+        if timed.total_seconds() > 31557600:
             await interaction.response.send_message("I doubt the discord will exist for 10+ years.", ephemeral=True)
             return
 
         # if the total amount of seconds is 0, then give an error and *die*
-        if total_seconds == 0:
+        if timed.total_seconds() == 0:
             await interaction.response.send_message(f"To use instant reminders buy a DLC for 49.99$", ephemeral=True)
             return
 
@@ -123,8 +100,7 @@ class EXTRemindMe(commands.Cog):
             self.remindme_database[user_id] = []
 
         # add a reminder for a user
-        future_time = datetime.now()
-        future_time += timedelta(0, total_seconds)
+        future_time = datetime.now() + timed
         self.remindme_database[user_id].append({
             "timestamp": future_time.strftime("%Y-%m-%d %H:%M:%S"),
             "message": message
