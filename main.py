@@ -87,8 +87,8 @@ class Client(commands.Bot):
         await self.change_presence(activity=discord.Game("God Revision 2"))
 
         # sync the command tree
-        # sync = await self.tree.sync()
-        # print(f"Slash command tree synced {len(sync)} commands\n")
+        sync = await self.tree.sync()
+        print(f"Slash command tree synced {len(sync)} commands\n")
 
         # check all the member's membership
         print("User membership test")
