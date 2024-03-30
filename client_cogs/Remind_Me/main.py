@@ -79,20 +79,35 @@ class EXTRemindMe(commands.Cog):
 
         # if the total amount of time is bigger than 10 years, give an error and die
         if timed.days > 3652:
-            await interaction.response.send_message("I doubt the discord will exist for 10+ years.", ephemeral=True)
+            # make a pretty embed
+            embed = discord.Embed(title="Error!", description="I doubt the discord will exist for 10+ years.",
+                                  color=discord.Color.red())
+
+            # send the error message and return
+            await interaction.response.send_message(embed=embed, ephemeral=True)
             return
 
         # if the total amount of seconds is 0, then give an error and *die*
         if timed.total_seconds() == 0:
-            await interaction.response.send_message(f"To use instant reminders buy a DLC for 49.99$", ephemeral=True)
+            # make a pretty embed
+            embed = discord.Embed(title="Error!", description="To use instant reminders buy a DLC for 49.99$",
+                                  color=discord.Color.red())
+
+            # send the error message and return
+            await interaction.response.send_message(embed=embed, ephemeral=True)
             return
 
         # check if user is already present
         if (user_id := str(interaction.user.id)) in self.remindme_database:
             # if so, check if the user didn't hit the "remindme" cap
             if len(self.remindme_database[user_id]) > PER_USER_REMINDER_LIMIT:
-                await interaction.response.send_message(
-                    f"You've reached the reminder limit of {PER_USER_REMINDER_LIMIT}", ephemeral=True)
+                # make a pretty embed
+                embed = discord.Embed(title="Error!", description="Too many reminders!", color=discord.Color.red())
+                embed.add_field(name="Message", value=f"You've reached the reminder limit of {PER_USER_REMINDER_LIMIT}",
+                                inline=False)
+
+                # send the error message and return
+                await interaction.response.send_message(embed=embed, ephemeral=True)
                 return
 
         # if not, add a list for them
@@ -106,11 +121,15 @@ class EXTRemindMe(commands.Cog):
             "message": message
         })
 
-        # send the sucks ass message
-        await interaction.response.send_message("Reminder successfully created!")
-
         # update the database
         self.update_remindme_database()
+
+        # make a pretty embed
+        embed = discord.Embed(title="Success!", description="Reminder is set", color=discord.Color.green())
+        embed.add_field(name="Notification date", value=f"<t:{int(future_time.timestamp())}>", inline=False)
+
+        # send the success message
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
     @tasks.loop(seconds=DATABASE_UPDATE_TIME)
     async def check_reminders(self):
@@ -134,11 +153,18 @@ class EXTRemindMe(commands.Cog):
 
                 # if the time is negative, that means it has already past that
                 if (timestamp - datetime.now()).total_seconds() <= 0:
-                    message = f"Reminder for <t:{int(timestamp.timestamp())}>\n{reminder['message']}"
+                    if len(reminder['message']) <= 200:
+                        embed = discord.Embed(title="Reminder!",
+                                              description=f"Reminder for <t:{int(timestamp.timestamp())}>",
+                                              color=discord.Color.green())
+                        embed.add_field(name="Message", value=reminder['message'])
+                    else:
+                        embed = None
+                        boring_message = f"Reminder for <t:{int(timestamp.timestamp())}>\n{reminder['message']}"
 
-                    # check that the message isn't too big
-                    if len(message) >= 2000:
-                        message = message[:1995] + "..."
+                        # check that the message isn't too big
+                        if len(boring_message) >= 2000:
+                            boring_message = boring_message[:1995] + "..."
 
                     # remove the reminder from the database
                     self.remindme_database[user_id].pop(reminder_idx)
@@ -146,7 +172,10 @@ class EXTRemindMe(commands.Cog):
 
                     # try to send the reminder to the user's dm
                     try:
-                        await user.send(message)
+                        if embed is None:
+                            await user.send(boring_message)
+                        else:
+                            await user.send(embed=embed)
 
                     # if failed for these reasons, just ignore
                     except discord.HTTPException or discord.Forbidden:
