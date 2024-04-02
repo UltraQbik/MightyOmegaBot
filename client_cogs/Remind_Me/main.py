@@ -33,9 +33,10 @@ class EXTRemindMe(commands.Cog):
                 file.write("{\n}")
 
         # read the database
+        self.db: dict[str, list[dict[str, str]]] | None = None
         with open(self.db_path, "r") as file:
             try:
-                self.remindme_database: dict[str, list[dict[str, str]]] = json.loads(file.read())
+                self.db = json.loads(file.read())
             except json.decoder.JSONDecodeError:
                 print("WARN: RemindMe Unable to load the database, due to an error when decoding it")
                 print("WARN: RemindMe cog is down")
@@ -98,9 +99,9 @@ class EXTRemindMe(commands.Cog):
             return
 
         # check if user is already present
-        if (user_id := str(interaction.user.id)) in self.remindme_database:
+        if (user_id := str(interaction.user.id)) in self.db:
             # if so, check if the user didn't hit the "remindme" cap
-            if len(self.remindme_database[user_id]) > PER_USER_REMINDER_LIMIT:
+            if len(self.db[user_id]) > PER_USER_REMINDER_LIMIT:
                 # make a pretty embed
                 embed = discord.Embed(title="Error!", description="Too many reminders!", color=discord.Color.red())
                 embed.add_field(name="Message", value=f"You've reached the reminder limit of {PER_USER_REMINDER_LIMIT}",
@@ -112,11 +113,11 @@ class EXTRemindMe(commands.Cog):
 
         # if not, add a list for them
         else:
-            self.remindme_database[user_id] = []
+            self.db[user_id] = []
 
         # add a reminder for a user
         future_time = datetime.now() + timed
-        self.remindme_database[user_id].append({
+        self.db[user_id].append({
             "timestamp": future_time.strftime("%Y-%m-%d %H:%M:%S"),
             "message": message
         })
@@ -138,7 +139,7 @@ class EXTRemindMe(commands.Cog):
         """
 
         # go through the database
-        for user_id, reminders in self.remindme_database.items():
+        for user_id, reminders in self.db.items():
             # fetch the user
             user = self.client.get_user(int(user_id))
 
@@ -167,7 +168,7 @@ class EXTRemindMe(commands.Cog):
                             boring_message = boring_message[:1995] + "..."
 
                     # remove the reminder from the database
-                    self.remindme_database[user_id].pop(reminder_idx)
+                    self.db[user_id].pop(reminder_idx)
                     reminder_idx -= 1
 
                     # try to send the reminder to the user's dm
@@ -204,7 +205,7 @@ class EXTRemindMe(commands.Cog):
 
         # write updates to the database file
         with open(self.db_path, "w", encoding="utf8") as file:
-            file.write(json.dumps(self.remindme_database, indent=2))
+            file.write(json.dumps(self.db, indent=2))
 
 
 async def setup(client: commands.Bot) -> None:
