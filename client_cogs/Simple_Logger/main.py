@@ -2,11 +2,14 @@
 This is an example extension cog for MightyOmegaBot.
 It shows you how to add your own cogs for the bot if you want to contribute.
 """
+
 import json
 import os
+from datetime import datetime
+
 import discord
 from discord import app_commands
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 
 class EXTLogger(commands.Cog):
@@ -18,31 +21,98 @@ class EXTLogger(commands.Cog):
         self.client = client
 
         # path to logger's database
+        # every line is json, but the file itself is not
         self.db_path = "var/logger_db.json"
         if not os.path.isfile(self.db_path):
-            with open(self.db_path, "w", encoding="utf8") as file:
-                file.write("[\n]")
+            open(self.db_path, "w", encoding="utf8").close()
 
-        # read the database
-        self.db: list[dict[str, str]] | None = None
-        with open(self.db_path, "r", encoding="utf8") as file:
-            try:
-                self.db = json.loads(file.read())
-            except json.decoder.JSONDecodeError:
-                print("WARN: Logger unable to load the database due to json decoder error")
-                print("WARN: Logger cog is down")
-                self.cog_unload()
-                return
+        # launch the task
+        self.check_database.start()
 
     @commands.Cog.listener()
-    async def on_message_edit(self, before, after):
+    async def on_message_edit(self, before: discord.Message, after: discord.Message):
         """
         When the message is edited
         """
 
+        # find references of same message id
+        with open(self.db_path, "r+", encoding="utf8") as file:
+            seek = 0
+            while (line := file.readline()) is not None:
+                # if we reached the end
+                if line == "\n" or line == "":
+                    break
+
+                # decode the entry
+                decoded_json = json.loads(line)
+
+                # when the same message id is found, then append the changes to the entry and return
+                if decoded_json["action"] == "edited" and decoded_json["message_id"] == str(before.id):
+                    # append new edit
+                    decoded_json["messages"].append(
+                        {
+                            "action_time": datetime.now().__str__(),
+                            "message": after.content
+                        }
+                    )
+                    # seek to the beginning of the line
+                    file.seek(seek, 0)
+
+                    # write changes to the database
+                    file.write(json.dumps(decoded_json) + "\n")
+                    return
+
+                seek = file.tell()
+
+        # if message doesn't already exist, add a new entry
+        self.update_database(
+            {
+                "action": "edited",
+                "creation_time": before.created_at.__str__(),
+                "message_id": before.id.__str__(),
+                "message_author_id": before.author.id,
+                "message_author_dn": before.author.display_name,
+                "messages": [
+                    {
+                        "action_time": datetime.now().__str__(),
+                        "message": before.content
+                    },
+                    {
+                        "action_time": datetime.now().__str__(),
+                        "message": after.content
+                    }
+                ]
+            }
+        )
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, message: discord.Message):
+        """
+        When the message is deleted
+        """
+
+        # append data to the database
+        self.update_database(
+            {
+                "action": "deleted",
+                "action_time": datetime.now().__str__(),
+                "creation_time": message.created_at.__str__(),
+                "message_id": message.id.__str__(),
+                "message_author_id": message.author.id,
+                "message_author_dn": message.author.display_name,
+                "message": message.content
+            }
+        )
+
+    @tasks.loop(hours=2)
+    async def check_database(self):
+        """
+        Checks logger's database and removes logs that are older than 1 day
+        """
+
         pass
 
-    def update_database(self):
+    def update_database(self, data: object):
         """
         Updates logger's database
         """
@@ -54,8 +124,8 @@ class EXTLogger(commands.Cog):
             print("INFO: Loggers database will be created from the one currently loaded")
 
         # write updates to the database file
-        with open(self.db_path, "w", encoding="utf8") as file:
-            file.write(json.dumps(self.db, indent=2))
+        with open(self.db_path, "a", encoding="utf8") as file:
+            file.write(json.dumps(data) + "\n")
 
 
 async def setup(client: commands.Bot) -> None:
