@@ -51,10 +51,13 @@ class EXTLogger(commands.Cog):
                     # append new edit
                     decoded_json["messages"].append(
                         {
-                            "action_time": datetime.now().__str__(),
+                            "action_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                             "message": after.content
                         }
                     )
+                    # update action time
+                    decoded_json["action_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
                     # seek to the beginning of the line
                     file.seek(seek, 0)
 
@@ -62,23 +65,25 @@ class EXTLogger(commands.Cog):
                     file.write(json.dumps(decoded_json) + "\n")
                     return
 
+                # get the end of the line (beginning of next one)
                 seek = file.tell()
 
         # if message doesn't already exist, add a new entry
         self.update_database(
             {
                 "action": "edited",
-                "creation_time": before.created_at.__str__(),
+                "action_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "creation_time": before.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                 "message_id": before.id.__str__(),
                 "message_author_id": before.author.id,
                 "message_author_dn": before.author.display_name,
                 "messages": [
                     {
-                        "action_time": datetime.now().__str__(),
+                        "action_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         "message": before.content
                     },
                     {
-                        "action_time": datetime.now().__str__(),
+                        "action_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                         "message": after.content
                     }
                 ]
@@ -95,8 +100,8 @@ class EXTLogger(commands.Cog):
         self.update_database(
             {
                 "action": "deleted",
-                "action_time": datetime.now().__str__(),
-                "creation_time": message.created_at.__str__(),
+                "action_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "creation_time": message.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                 "message_id": message.id.__str__(),
                 "message_author_id": message.author.id,
                 "message_author_dn": message.author.display_name,
@@ -110,7 +115,20 @@ class EXTLogger(commands.Cog):
         Checks logger's database and removes logs that are older than 1 day
         """
 
-        pass
+        with open(self.db_path, "r+", encoding="utf8") as file:
+            seek = 0
+            while (line := file.readline()) is not None:
+                # if we reached the end
+                if line == "\n" or line == "":
+                    break
+
+                decoded_json = json.loads(line)
+                time = datetime.strptime(decoded_json["action_time"], "%Y-%m-%d %H:%M:%S")
+                if (datetime.now() - time).total_seconds() > 86400:
+                    pass
+
+                # get the end of the line (beginning of next one)
+                seek = file.tell()
 
     def update_database(self, data: object):
         """
