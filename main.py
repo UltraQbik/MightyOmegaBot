@@ -31,7 +31,7 @@ class Client(commands.Bot):
             "LaTeX_Converter",
             "Remind_Me",
             "Better_Timeouts",
-            "Simple_Logger",
+            # "Simple_Logger",
         ]
 
         # check all the installed extensions

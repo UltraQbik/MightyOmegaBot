@@ -109,26 +109,31 @@ class EXTLogger(commands.Cog):
             }
         )
 
-    @tasks.loop(hours=2)
+    @tasks.loop(hours=4)
     async def check_database(self):
         """
         Checks logger's database and removes logs that are older than 1 day
         """
 
-        with open(self.db_path, "r+", encoding="utf8") as file:
-            seek = 0
-            while (line := file.readline()) is not None:
-                # if we reached the end
-                if line == "\n" or line == "":
-                    break
+        # makes new temp database file with old record (older than 1 day) being deleted
+        with open(self.db_path, "r", encoding="utf8") as file:
+            with open(self.db_path + ".tmp", "w", encoding="utf8") as newfile:
+                while (line := file.readline()) is not None:
+                    # if we reached the end
+                    if line == "\n" or line == "":
+                        break
 
-                decoded_json = json.loads(line)
-                time = datetime.strptime(decoded_json["action_time"], "%Y-%m-%d %H:%M:%S")
-                if (datetime.now() - time).total_seconds() > 86400:
-                    pass
+                    # fetch and decode entry
+                    decoded_json = json.loads(line)
 
-                # get the end of the line (beginning of next one)
-                seek = file.tell()
+                    # if the entry is younger than 1 day, write to new file
+                    time = datetime.strptime(decoded_json["action_time"], "%Y-%m-%d %H:%M:%S")
+                    if (datetime.now() - time).total_seconds() < 86400:
+                        newfile.write(line)
+
+        # use os to delete old database, and rename new one
+        os.remove(self.db_path)
+        os.rename(self.db_path + ".tmp", self.db_path)
 
     def update_database(self, data: object):
         """
