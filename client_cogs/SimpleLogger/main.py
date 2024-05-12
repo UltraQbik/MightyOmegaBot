@@ -56,8 +56,12 @@ class EXTLogger(commands.Cog):
         embed.set_author(name=after.author.display_name, icon_url=after.author.avatar.url)
         embed.add_field(name="Created at:", value=f"<t:{after.created_at.timestamp():.0f}>", inline=False)
         embed.add_field(name="Edited at:", value=f"<t:{after.edited_at.timestamp():.0f}>", inline=False)
-        embed.add_field(name="Content before:", value=before.content, inline=False)
-        embed.add_field(name="Content after:", value=after.content, inline=False)
+        embed.add_field(name="Content before:",
+                        value=before.content if len(before.content) < 1024 else before.content[:1018] + '...',
+                        inline=False)
+        embed.add_field(name="Content after:",
+                        value=after.content if len(after.content) < 1024 else after.content[:1018] + '...',
+                        inline=False)
 
         # send the embed
         await channel.send(embed=embed)
@@ -83,7 +87,9 @@ class EXTLogger(commands.Cog):
             color=discord.Color.red())
         embed.set_author(name=message.author.display_name, icon_url=message.author.avatar.url)
         embed.add_field(name="Created at:", value=f"<t:{message.created_at.timestamp():.0f}>", inline=False)
-        embed.add_field(name="Content:", value=message.content, inline=False)
+        embed.add_field(name="Content:",
+                        value=message.content if len(message.content) < 1024 else message.content[:1018] + '...',
+                        inline=False)
 
         # send the embed
         await channel.send(embed=embed)
