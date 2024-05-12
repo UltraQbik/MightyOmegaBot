@@ -41,21 +41,21 @@ class EXTLogger(commands.Cog):
         """
 
         # check if logger was configured
-        if before.guild.id not in self.logging_cfg:
+        if after.guild.id not in self.logging_cfg:
             print("ERROR: SimpleLogger: cog was not configured properly")
             return
 
         # fetch logging channel
-        channel = self.client.get_channel(self.logging_cfg[before.guild.id])
+        channel = self.client.get_channel(self.logging_cfg[after.guild.id])
 
         # make a pretty embed
         embed = discord.Embed(
-            title="Delete message",
+            title="Edited message",
             description=f"Channel: {channel.name}",
             color=discord.Color.orange())
-        embed.set_author(name=before.author.display_name, icon_url=before.author.avatar.url)
-        embed.add_field(name="Created at:", value=f"<t:{before.created_at.timestamp():.0f}>", inline=False)
-        embed.add_field(name="Edited at:", value=f"<t:{before.edited_at.timestamp():.0f}>", inline=False)
+        embed.set_author(name=after.author.display_name, icon_url=after.author.avatar.url)
+        embed.add_field(name="Created at:", value=f"<t:{after.created_at.timestamp():.0f}>", inline=False)
+        embed.add_field(name="Edited at:", value=f"<t:{after.edited_at.timestamp():.0f}>", inline=False)
         embed.add_field(name="Content before:", value=before.content, inline=False)
         embed.add_field(name="Content after:", value=after.content, inline=False)
 
