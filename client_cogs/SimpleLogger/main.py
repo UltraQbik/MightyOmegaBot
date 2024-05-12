@@ -1,6 +1,12 @@
 """
-This is an example extension cog for MightyOmegaBot.
-It shows you how to add your own cogs for the bot if you want to contribute.
+This is SimpleLogger cog for the MightyOmegaBot. It does what it says, and it just logs the messages of the users.
+Notification about any message that was deleted / edited will be sent to a designated by user channel.
+
+To add channel for notifications edit `SimpleLogger.cfg` file, and add following lines
+```
+[guild_id]
+loggingChannel=[channel_id]
+```
 """
 
 import discord
@@ -10,7 +16,8 @@ from discord.ext import commands
 
 class EXTLogger(commands.Cog):
     """
-    This is an example cog which adds example commands
+    This is simple logger cog. It will log when users edit / delete messages,
+    and put a notification about it to a designated channel. Edit `SimpleLogger.cfg` to change the channel
     """
 
     def __init__(self, client: commands.Bot) -> None:
