@@ -7,14 +7,18 @@ which adds '/remindme' command, which then was added to MightyOmegaBot (with som
 import os
 import json
 import discord
+import configparser
 from datetime import datetime, timedelta
 from discord.ext import commands, tasks
 from discord import app_commands
 
 
 # Constants
-DATABASE_UPDATE_TIME: int = 5       # in seconds
-PER_USER_REMINDER_LIMIT: int = 30   # how many reminders can 1 user have
+cfg = configparser.ConfigParser()
+cfg.read("client_configs/RemindMe.cfg")
+
+DATABASE_UPDATE_TIME: int = int(cfg["default"]["databaseUpdateTime"])           # in seconds
+PER_USER_REMINDER_LIMIT: int = int(cfg["default"]["perUserReminderLimit"])      # how many reminders can 1 user have
 
 
 class EXTRemindMe(commands.Cog):
