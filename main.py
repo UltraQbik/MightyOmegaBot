@@ -5,9 +5,6 @@ import configparser
 from discord.ext import commands
 
 
-GLOBAL_CONFIG = {}
-
-
 class Client(commands.Bot):
     def __init__(self):
         super(Client, self).__init__(command_prefix="!", intents=discord.Intents.all(),
@@ -17,6 +14,10 @@ class Client(commands.Bot):
         if not os.path.isdir("var"):
             os.mkdir("var")
 
+        # bots role config
+        # format: {[guild_id]: {"member": [role_id], "someone": [role_id], ...}}
+        self.role_cfg: dict[str, dict[str, str]] = {}
+
         # list of all discord cogs
         # format: {"extension": "filepath"}
         self.working_extensions: dict[str, str] = {}
@@ -24,18 +25,21 @@ class Client(commands.Bot):
         # list of discord cogs that loaded by default
         # format: ["extension1", "extension2", ...]
         self.loaded_extensions: list[str] = [
-            "Minesweeper_Game",
-            "Help_Command",
-            "Rofl_Commands",
-            # "Youtube_Notifications",  # too unstable
-            "LaTeX_Converter",
-            "Remind_Me",
-            "Better_Timeouts",
-            # "Simple_Logger",
+            "MinesweeperGame",
+            "HelpCommand",
+            "RoflCommands",
+            # "YoutubeNotifications",  # too unstable
+            "LaTeXConverter",
+            "RemindMe",
+            "BetterTimeouts",
+            # "SimpleLogger",  # not done
         ]
 
         # check all the installed extensions
         self.check_working_extensions()
+
+        # load all configs
+        self.load_configs()
 
     def check_working_extensions(self):
         """
@@ -48,6 +52,20 @@ class Client(commands.Bot):
                 # import the extension to the list of working extensions
                 # with the name being the name of the folder it's in
                 self.working_extensions[folder] = f"client_cogs.{folder}.main"
+
+    def load_configs(self):
+        """
+        Loads config files for the main bot part
+        """
+
+        # load in roles config
+        role_cfg = configparser.ConfigParser()
+        role_cfg.read("client_configs/roles.cfg")
+
+        for guild_id in role_cfg.sections():
+            self.role_cfg[guild_id] = {
+                "DiscordMemberRole": role_cfg[guild_id].get("DiscordMemberRole", "")
+            }
 
     async def load_custom_extension(self, name):
         """
@@ -95,12 +113,13 @@ class Client(commands.Bot):
         print("User membership test")
         for guild in self.guilds:
             try:
-                role_id = int(GLOBAL_CONFIG["roles config"][guild.id.__str__()]["DiscordMemberRole"])
+                role_id = int(self.role_cfg[guild.id.__str__()]["DiscordMemberRole"])
             except KeyError:
                 print(f"\tGuild '{guild.name}' doesn't have roles configured", end="\n\n")
                 continue
             for member in guild.members:
-                # You are NOT supposed to do that, but we do NEED to check by role's id
+                # Access to a protected member, but idc,
+                # otherwise there doesn't seem to be a good way of checking by role id
                 if role_id not in member._roles:
                     await member.add_roles(guild.get_role(role_id))
                     print(f"\tAdded role to: {member.id} / {member.display_name}")
@@ -108,33 +127,24 @@ class Client(commands.Bot):
         # print the done message
         print("Done!\n")
 
-    @staticmethod
-    async def on_member_join(member: discord.Member):
+    async def on_member_join(self, member: discord.Member):
         """
         When a new user joins
         """
 
-        role_id = int(GLOBAL_CONFIG["roles config"][member.guild.id.__str__()]["DiscordMemberRole"])
+        role_id = int(self.role_cfg[member.guild.id.__str__()]["DiscordMemberRole"])
         await member.add_roles(member.guild.get_role(role_id))
 
 
-def parse_config_file(filepath: str):
-    config = configparser.ConfigParser()
-    config.read(filepath)
-    return config
-
-
 def main():
+    """
+    Main entrance to the bot
+    """
+
     # Useless message at the start of the bot
     if os.name != "nt":
         print("NOTE: You are running on non-windows machine, some of the things may be buggy\n"
               "Please report any issues to 'https://github.com/UltraQbik/MightyOmegaBot/issues'\n\n")
-
-    # Load all configs from 'discord configs'
-    global GLOBAL_CONFIG
-    for file in os.listdir("client_configs"):
-        if os.path.isfile(f"client_configs/{file}"):
-            GLOBAL_CONFIG[os.path.splitext(file)[0]] = parse_config_file(f"client_configs/{file}")
 
     client = Client()
     client.run(sys.argv[1])

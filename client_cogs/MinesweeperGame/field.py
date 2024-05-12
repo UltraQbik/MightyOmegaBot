@@ -1,6 +1,6 @@
 from typing import List
 from random import randint
-from client_cogs.Minesweeper_Game import cell
+from client_cogs.MinesweeperGame import cell
 
 
 class Field:
