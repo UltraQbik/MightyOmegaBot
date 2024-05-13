@@ -58,7 +58,7 @@ class EXTLogger(commands.Cog):
         # make a pretty embed
         embed = discord.Embed(
             title="Edited message",
-            description=f"Channel: {after.channel.name}",
+            description=f"Channel: {after.channel.mention} -> {after.jump_url}",
             color=discord.Color.orange())
         embed.set_author(name=after.author.display_name, icon_url=after.author.avatar.url)
         embed.add_field(name="Created at:", value=f"<t:{after.created_at.timestamp():.0f}>", inline=False)
@@ -90,7 +90,7 @@ class EXTLogger(commands.Cog):
         # make a pretty embed
         embed = discord.Embed(
             title="Delete message",
-            description=f"Channel: {message.channel.name}",
+            description=f"Channel: {message.channel.mention}",
             color=discord.Color.red())
         embed.set_author(name=message.author.display_name, icon_url=message.author.avatar.url)
         embed.add_field(name="Created at:", value=f"<t:{message.created_at.timestamp():.0f}>", inline=False)
