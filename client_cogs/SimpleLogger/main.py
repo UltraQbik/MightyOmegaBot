@@ -2,7 +2,7 @@
 This is SimpleLogger cog for the MightyOmegaBot. It does what it says, and it just logs the messages of the users.
 Notification about any message that was deleted / edited will be sent to a designated by user channel.
 
-To add channel for notifications edit `SimpleLogger.cfg` file, and add following lines
+To add channel for notifications edit `SimpleLogger.cfg` file, and add following lines:
 ```
 [guild_id]
 loggingChannel=[channel_id]
