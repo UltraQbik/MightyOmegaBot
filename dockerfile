@@ -1,12 +1,12 @@
-FROM python:3
+FROM python:3.12-slim
 
-RUN mkdir -p /app
 WORKDIR /app
 
 COPY . .
 
 RUN pip install -r requirements.txt &&\
   apt-get update &&\
-  apt-get -y install dvipng texlive-latex-extra texlive-latex-recommended texlive-base
+  apt-get install -y --no-install-recommends dvipng texlive-latex-base texlive-latex-extra &&\
+  apt-get autoremove -y
 
 CMD python3 main.py $(cat /run/secrets/omegabot-token)
