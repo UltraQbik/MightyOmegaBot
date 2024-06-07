@@ -64,7 +64,7 @@ class Client(commands.Bot):
 
         for guild_id in role_cfg.sections():
             self.role_cfg[guild_id] = {
-                "DiscordMemberRole": role_cfg[guild_id].get("DiscordMemberRole", "")
+                "MemberRole": role_cfg[guild_id].get("MemberRole", "")
             }
 
     async def load_custom_extension(self, name):
@@ -113,7 +113,7 @@ class Client(commands.Bot):
         print("User membership test")
         for guild in self.guilds:
             try:
-                role_id = int(self.role_cfg[guild.id.__str__()]["DiscordMemberRole"])
+                role_id = int(self.role_cfg[guild.id.__str__()]["MemberRole"])
             except KeyError:
                 print(f"\tGuild '{guild.name}' doesn't have roles configured", end="\n\n")
                 continue
@@ -132,7 +132,7 @@ class Client(commands.Bot):
         When a new user joins
         """
 
-        role_id = int(self.role_cfg[member.guild.id.__str__()]["DiscordMemberRole"])
+        role_id = int(self.role_cfg[member.guild.id.__str__()]["MemberRole"])
         await member.add_roles(member.guild.get_role(role_id))
 
 
