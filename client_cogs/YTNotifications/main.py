@@ -100,7 +100,7 @@ class EXTYoutubeModule(commands.Cog):
                             ping=f'<@&{self.notifs_cfg[guild.id]["pingRole"]}>',
                             channel_name=fetch_channel_name(channel),
                             video_link=f'https://www.youtube.com/watch?v={video}'
-                        )
+                        ).replace("\\n", "\n").replace("\\t", " "*4)
 
                         await news_channel.send(message)
 
