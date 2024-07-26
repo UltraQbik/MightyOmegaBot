@@ -20,15 +20,48 @@ class EXTYoutubeModule(commands.Cog):
     def __init__(self, client: commands.Bot):
         self.client = client
 
-        self.channels: list[dict[str, list[str] | str]] = []
-        # format: [
-        #   {
-        #     "channelId": "ID",
-        #     "latestVideos": ["videoId", "videoId", "videoId", "videoId", "videoId"]
+        # cog's config file
+        self.notifs_cfg: dict[int, dict[str, int | list[str]]] = {}
+        # {
+        #   [guildId]: {
+        #     "newsChannel": [channelId],
+        #     "channels": [[ytchannelId], [ytchannelId], [ytchannelId]]
         #   }
-        # ]
+        # }
 
-        self.check.start()
+        # YouTube channel's list of 5 last videos
+        self.channels: dict[str, list] = {}
+        # {
+        #   [ytchannelId]: [[videoId], [videoId], [videoId], [videoId], [videoId]]
+        # }
+
+        self.load_configs()
+        # self.check.start()
+
+    def load_configs(self):
+        """
+        Loads configs into the cog
+        """
+
+        # read the config files
+        cfg = configparser.ConfigParser()
+        cfg.read("client_configs/YTNotifications.cfg")
+
+        # keep track of channel urls
+        channel_urls: set[str] = set()
+
+        # write config into ram
+        for guild_id in cfg.sections():
+            channels = json.loads(cfg[guild_id]["channels"])
+            self.notifs_cfg[int(guild_id)] = {
+                "newsChannel": int(cfg[guild_id]["newsChannel"]),
+                "channels": channels
+            }
+            channel_urls.update(channels)
+
+        # update all channels
+        for channel in channel_urls:
+            self.channels[channel] = fetch_videos(channel, 5)
 
     @tasks.loop(minutes=5)
     async def check(self):
