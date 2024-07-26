@@ -73,6 +73,7 @@ class EXTYoutubeModule(commands.Cog):
 
         # go through all guilds the bot is in
         for guild in self.client.guilds:
+
             # skip guild, if it's not in notifications config
             if guild.id not in self.notifs_cfg:
                 continue
@@ -95,7 +96,7 @@ class EXTYoutubeModule(commands.Cog):
                     # if video is not in the database, make a notification about it
                     if video not in self.channels[channel]:
                         message = self.notifs_cfg[guild.id]["pingMsg"]
-                        message.format(
+                        message = message.format(
                             ping=f'<@&{self.notifs_cfg[guild.id]["pingRole"]}>',
                             channel_name=fetch_channel_name(channel),
                             video_link=f'https://www.youtube.com/watch?v={video}'
