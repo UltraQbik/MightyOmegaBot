@@ -65,11 +65,11 @@ class EXTYoutubeModule(commands.Cog):
 
         # update all channels
         for channel in channel_urls:
-            self.channels[channel] = fetch_videos(channel, 5)
+            self.channels[channel] = fetch_videos(channel, 10)
 
-    @tasks.loop(minutes=5)
+    @tasks.loop(minutes=10)
     async def check(self):
-        """ Checks every 5 minutes for a new video"""
+        """ Checks every 10 minutes for a new video"""
 
         # go through all guilds the bot is in
         for guild in self.client.guilds:
@@ -88,11 +88,12 @@ class EXTYoutubeModule(commands.Cog):
 
             # go through channels, and check for new videos
             for channel in self.notifs_cfg[guild.id]["channels"]:
-                # fetch 5 last videos
-                last_videos = fetch_videos(channel, 5)
+                # fetch 10 last videos
+                last_videos = fetch_videos(channel, 10)
 
-                # go through videos, and check if they are all in the database
-                for video in last_videos:
+                # go through 5 last videos, and check if they are all in the database
+                # this is needed in case new video was deleted, so the old one's wouldn't count as new
+                for video in last_videos[:-5]:
                     # if video is not in the database, make a notification about it
                     if video not in self.channels[channel]:
                         message = self.notifs_cfg[guild.id]["pingMsg"]
