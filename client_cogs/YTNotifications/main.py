@@ -4,6 +4,8 @@ Previous version was on occasions spamming with pings, which is why it was disab
 Assumed problem was ScrapeTube library that was used, that's why in this one there are no uncommon libraries used.
 """
 
+import json
+import configparser
 from discord.ext import commands, tasks
 from client_cogs.YTNotifications.fetcher import fetch_videos
 
