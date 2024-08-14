@@ -33,6 +33,7 @@ class Client(commands.Bot):
             "RemindMe",
             "BetterTimeouts",
             "SimpleLogger",
+            "Status"
         ]
 
         # check all the installed extensions
