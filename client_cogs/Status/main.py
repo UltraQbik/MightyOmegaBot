@@ -52,9 +52,9 @@ class EXTStatus(commands.Cog):
 
                 uptime_str = ""
                 if int(uptime % 60) > 0:
-                    uptime_str = f"{uptime % 60:.0f} sec{'' if int(uptime % 60) == 1 else 's'}"
+                    uptime_str = f"{uptime % 60:.0f} second{'' if int(uptime % 60) == 1 else 's'}"
                 if int(minutes % 60) > 0:
-                    uptime_str = f"{minutes % 60:.0f} min{'' if int(minutes % 60) == 1 else 's'} " + uptime_str
+                    uptime_str = f"{minutes % 60:.0f} minute{'' if int(minutes % 60) == 1 else 's'} " + uptime_str
                 if int(hours % 24) > 0:
                     uptime_str = f"{hours % 24:.0f} hour{'' if int(hours % 24) == 1 else 's'} " + uptime_str
                 if int(days % 60) > 0:
