@@ -67,12 +67,14 @@ class EXTStatus(commands.Cog):
                                   color=discord.Color.green())
             embed.add_field(name="latency", value=f"{ping*1000:.2f} ms", inline=False)
             embed.add_field(name="uptime", value=uptime_str, inline=False)
-
-            await interaction.response.send_message(embed=embed)
         elif choices.value == "host":
-            pass
+            embed = discord.Embed(title="Host status", description="Current hosting machine status",
+                                  color=discord.Color.green())
         else:
-            pass
+            embed = discord.Embed(title="Minecraft status", description="Current minecraft server status",
+                                  color=discord.Color.green())
+
+        await interaction.response.send_message(embed=embed)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(EXTStatus(client))
