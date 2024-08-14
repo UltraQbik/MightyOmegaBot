@@ -87,15 +87,15 @@ class EXTStatus(commands.Cog):
             memory = psutil.virtual_memory()
             network = psutil.net_io_counters()
 
-            embed.add_field(name="cpu usage (%)", value=f"{cpu_percent}%", inline=False)
-            embed.add_field(name="cpu freq (MHz)", value=f"{cpu_freq.current} MHz", inline=False)
+            embed.add_field(name="cpu usage (%)", value=f"{cpu_percent}%")
+            embed.add_field(name="cpu freq (MHz)", value=f"{cpu_freq.current} MHz")
             if cpu_temp:
                 embed.add_field(name="cpu temp (°C)", value=f"{cpu_temp['coretemp'][0].current}", inline=False)
-            embed.add_field(name="memory",
-                            value=f"{memory.used/(2**20)} MiB / {memory.total/(2**20)} MiB | "
+            embed.add_field(name="ram usage",
+                            value=f"{memory.used/(2**20):.2f} MiB / {memory.total/(2**20):.2f} MiB | "
                                   f"{memory.used / memory.total * 100:.0f}%", inline=False)
-            embed.add_field(name="network (sent)", value=f"{network.bytes_sent/(2**20)} MiB")
-            embed.add_field(name="network (recv)", value=f"{network.bytes_recv/(2**20)} MiB")
+            embed.add_field(name="network (sent)", value=f"{network.bytes_sent/(2**20):.2f} MiB")
+            embed.add_field(name="network (recv)", value=f"{network.bytes_recv/(2**20):.2f} MiB")
             embed.add_field(name="network (err)", value=f"{network.errin + network.errout}")
         else:
             embed = discord.Embed(title="Minecraft status", description="Current minecraft server status",
