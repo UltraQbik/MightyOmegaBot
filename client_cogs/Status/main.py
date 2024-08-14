@@ -51,18 +51,18 @@ class EXTStatus(commands.Cog):
                 months = days / 30
 
                 uptime_str = ""
-                if int(uptime % 60) > 0:
-                    uptime_str = f"{uptime % 60:.0f} second{'' if int(uptime % 60) == 1 else 's'}"
-                if int(minutes % 60) > 0:
-                    uptime_str = f"{minutes % 60:.0f} minute{'' if int(minutes % 60) == 1 else 's'} " + uptime_str
-                if int(hours % 24) > 0:
-                    uptime_str = f"{hours % 24:.0f} hour{'' if int(hours % 24) == 1 else 's'} " + uptime_str
-                if int(days % 60) > 0:
-                    uptime_str = f"{days % 7:.0f} day{'' if int(days % 7) == 1 else 's'} " + uptime_str
-                if int(weeks % 4.28) > 0:
-                    uptime_str = f"{weeks % 4.28:.0f} week{'' if int(weeks % 4.28) == 1 else 's'} " + uptime_str
+                if int(uptime) % 60 > 0:
+                    uptime_str = f"{int(uptime) % 60} second{'' if int(uptime) % 60 == 1 else 's'}"
+                if int(minutes) % 60 > 0:
+                    uptime_str = f"{int(minutes) % 60} minute{'' if int(minutes) % 60 == 1 else 's'} " + uptime_str
+                if int(hours) % 24 > 0:
+                    uptime_str = f"{int(hours) % 24} hour{'' if int(hours) % 24 == 1 else 's'} " + uptime_str
+                if int(days) % 60 > 0:
+                    uptime_str = f"{int(days) % 7} day{'' if int(days) % 7 == 1 else 's'} " + uptime_str
+                if int(weeks) % 4.28 > 0:
+                    uptime_str = f"{int(weeks) % 4.28} week{'' if int(weeks) % 4.28 == 1 else 's'} " + uptime_str
                 if int(months) > 0:
-                    uptime_str = f"{months:.0f} month{'' if int(months) == 1 else 's'} " + uptime_str
+                    uptime_str = f"{int(months)} month{'' if int(months) == 1 else 's'} " + uptime_str
 
                 embed = discord.Embed(title="Bot status", description="Current bot status",
                                       color=discord.Color.green())
