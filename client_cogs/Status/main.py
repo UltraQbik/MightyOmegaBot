@@ -98,8 +98,10 @@ class EXTStatus(commands.Cog):
             embed.add_field(name="network (recv)", value=f"{network.bytes_recv/(2**20):.2f} MiB")
             embed.add_field(name="network (err)", value=f"{network.errin + network.errout}")
         else:
-            embed = discord.Embed(title="Minecraft status", description="Current minecraft server status",
-                                  color=discord.Color.green())
+            # TODO: make minecraft rcon + query fetching
+
+            embed = discord.Embed(title="Minecraft status (WIP)", description="Current minecraft server status",
+                                  color=discord.Color.orange())
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
