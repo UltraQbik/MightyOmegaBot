@@ -4,6 +4,7 @@ Prints out a status of certain things you choose
 """
 
 
+import os
 import psutil
 import discord
 from datetime import datetime
@@ -39,6 +40,11 @@ class EXTStatus(commands.Cog):
         """
 
         if choices.value == "bot":
+            # make pretty embed
+            embed = discord.Embed(title="Bot status", description="Current bot status",
+                                  color=discord.Color.green())
+
+            # fetch data
             ping = self.client.latency
 
             # uptime stuff
@@ -63,18 +69,39 @@ class EXTStatus(commands.Cog):
             if int(months) > 0:
                 uptime_str = f"{int(months)} month{'' if int(months) == 1 else 's'} " + uptime_str
 
-            embed = discord.Embed(title="Bot status", description="Current bot status",
-                                  color=discord.Color.green())
+            # add fields to embed
             embed.add_field(name="latency", value=f"{ping*1000:.2f} ms", inline=False)
             embed.add_field(name="uptime", value=uptime_str, inline=False)
         elif choices.value == "host":
+            # make pretty embed
             embed = discord.Embed(title="Host status", description="Current hosting machine status",
                                   color=discord.Color.green())
+
+            # fetch data
+            cpu_percent = psutil.cpu_percent(0.5)
+            cpu_freq = psutil.cpu_freq()
+            if os.name == "nt":
+                cpu_temp = None
+            else:
+                cpu_temp = psutil.sensors_temperatures()
+            memory = psutil.virtual_memory()
+            network = psutil.net_io_counters()
+
+            embed.add_field(name="cpu usage (%)", value=f"{cpu_percent}%", inline=False)
+            embed.add_field(name="cpu freq (MHz)", value=f"{cpu_freq.current} MHz", inline=False)
+            if cpu_temp:
+                embed.add_field(name="cpu temp (°C)", value=f"{cpu_temp['coretemp'][0].current}", inline=False)
+            embed.add_field(name="memory",
+                            value=f"{memory.used/(2**20)} MiB / {memory.total/(2**20)} MiB | "
+                                  f"{memory.used / memory.total * 100:.0f}%", inline=False)
+            embed.add_field(name="network (sent)", value=f"{network.bytes_sent/(2**20)} MiB")
+            embed.add_field(name="network (recv)", value=f"{network.bytes_recv/(2**20)} MiB")
+            embed.add_field(name="network (err)", value=f"{network.errin + network.errout}")
         else:
             embed = discord.Embed(title="Minecraft status", description="Current minecraft server status",
                                   color=discord.Color.green())
 
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(client: commands.Bot) -> None:
     await client.add_cog(EXTStatus(client))
