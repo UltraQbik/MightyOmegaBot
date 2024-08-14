@@ -61,7 +61,7 @@ class EXTStatus(commands.Cog):
                     uptime_str = f"{days % 7:.0f} day{'' if int(days % 7) == 1 else 's'} " + uptime_str
                 if int(weeks % 4.28) > 0:
                     uptime_str = f"{weeks % 4.28:.0f} week{'' if int(weeks % 4.28) == 1 else 's'} " + uptime_str
-                if months > 0:
+                if int(months) > 0:
                     uptime_str = f"{months:.0f} month{'' if int(months) == 1 else 's'} " + uptime_str
 
                 embed = discord.Embed(title="Bot status", description="Current bot status",
