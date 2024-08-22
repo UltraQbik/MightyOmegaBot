@@ -7,7 +7,7 @@ Assumed problem was ScrapeTube library that was used, that's why in this one the
 import json
 import configparser
 from discord.ext import commands, tasks
-from client_cogs.YTNotifications.fetcher import fetch_videos, fetch_channel_name
+from .fetcher import fetch_videos, fetch_channel_name
 
 
 class EXTYoutubeModule(commands.Cog):
