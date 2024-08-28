@@ -52,6 +52,10 @@ class EXTLogger(commands.Cog):
             print("ERROR: SimpleLogger: cog was not configured properly")
             return
 
+        # if after is None, return. That is somehow possible :/
+        if after is None:
+            return
+
         # fetch logging channel
         channel = self.client.get_channel(self.logging_cfg[after.guild.id])
 
