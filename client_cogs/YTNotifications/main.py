@@ -6,8 +6,24 @@ Assumed problem was ScrapeTube library that was used, that's why in this one the
 
 import json
 import configparser
+from typing import TypedDict
+from discord import TextChannel
 from discord.ext import commands, tasks
-from client_cogs.YTNotifications.fetcher import fetch_videos, fetch_channel_name
+from .fetcher import fetch_videos, fetch_channel_name
+
+
+NotifsConfig = dict[
+    int,
+    TypedDict(
+        "NotifsConfigGuild",
+        {
+            "newsChannel": int,
+            "pingRole": int,
+            "pingMsg": str,
+            "channels": list[str]
+        }
+    )
+]
 
 
 class EXTYoutubeModule(commands.Cog):
@@ -21,7 +37,7 @@ class EXTYoutubeModule(commands.Cog):
         self.client = client
 
         # cog's config file
-        self.notifs_cfg: dict[int, dict[str, str | int | list[str]]] = {}
+        self.notifs_cfg: NotifsConfig = {}
         # {
         #   [guildId]: {
         #     "newsChannel": [channelId],
@@ -82,7 +98,7 @@ class EXTYoutubeModule(commands.Cog):
 
             # skip if something wasn't configured properly
             # and print a message
-            if news_channel is None:
+            if news_channel is None or not isinstance(news_channel, TextChannel):
                 print("WARN: YTNotifs: news channel is not configured properly")
                 continue
 
